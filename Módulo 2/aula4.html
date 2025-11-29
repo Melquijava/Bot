@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 4 – Embeds e Mensagens Estilizadas | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    strong {
+      color: #e5e7eb;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 23px;
+      }
+      .page {
+        padding: 22px 12px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 4 • Módulo 2 – Interações</div>
+
+    <h1>Embeds e Mensagens Estilizadas</h1>
+    <p class="subtitle">
+      Objetivo da aula: aprender a criar <strong>embeds profissionais</strong>,
+      utilizar cores, imagens, campos, footers e iniciar o uso de
+      <strong>botões</strong> e <strong>menus</strong> para deixar as respostas do bot mais
+      bonitas, organizadas e fáceis de ler.
+    </p>
+
+    <!-- 1. O que é um embed -->
+    <h3 class="section-title"><span>▸</span> 1. O que é um embed no Discord?</h3>
+    <div class="card">
+      <p>
+        Um <strong>embed</strong> é uma caixa de mensagem estilizada que o bot pode enviar,
+        com:
+      </p>
+      <ul>
+        <li>Título</li>
+        <li>Descrição</li>
+        <li>Cor lateral</li>
+        <li>Campos (nome + valor)</li>
+        <li>Imagem e thumbnail</li>
+        <li>Footer e timestamp</li>
+      </ul>
+      <p>
+        Embeds são ideais para:
+      </p>
+      <ul>
+        <li>Mensagens de regras</li>
+        <li>Ajuda (<code>/help</code>)</li>
+        <li>Anúncios de eventos</li>
+        <li>Logs bem organizados</li>
+        <li>Respostas de comandos mais complexos</li>
+      </ul>
+    </div>
+
+    <!-- 2. Primeiro embed -->
+    <h3 class="section-title"><span>▸</span> 2. Criando o primeiro embed (conceito)</h3>
+    <div class="card">
+      <p>
+        Dependendo da ferramenta (Development for Discord, bot pronto, ou código),
+        a interface pode mudar, mas o conceito é o mesmo: você preenche campos de
+        um “cartão” de mensagem.
+      </p>
+
+      <div class="example-box">
+        <strong>Exemplo de embed de boas-vindas (estrutura):</strong><br><br>
+        <ul>
+          <li><strong>Título:</strong> Bem-vindo(a) ao Systems_BSI! 👋</li>
+          <li><strong>Descrição:</strong> Uma breve mensagem apresentando o servidor.</li>
+          <li><strong>Cor:</strong> Verde ciano (na pegada do Systems).</li>
+          <li><strong>Footer:</strong> “Systems_BSI • Formação em Programação & Cyber”.</li>
+        </ul>
+      </div>
+
+      <p>
+        Em código (que veremos depois em Python/JS), você basicamente cria um
+        “objeto embed” e manda junto com a resposta do bot.
+      </p>
+    </div>
+
+    <!-- 3. Campos, thumbnail, footer -->
+    <h3 class="section-title"><span>▸</span> 3. Campos, thumbnail, imagem e footer</h3>
+    <div class="card">
+      <p>
+        Os detalhes deixam o embed mais profissional e organizado. Alguns elementos:
+      </p>
+      <ul>
+        <li><strong>Campos:</strong> blocos nome + valor, usados para listar informações.</li>
+        <li><strong>Thumbnail:</strong> pequena imagem no canto superior direito.</li>
+        <li><strong>Imagem principal:</strong> uma imagem grande na parte inferior do embed.</li>
+        <li><strong>Footer:</strong> texto pequeno na parte de baixo, com ou sem ícone.</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de embed de /help (texto conceitual):</strong><br><br>
+        <code>
+          Título: Comandos disponíveis ⚙️<br>
+          Campo 1: Utilidade → /help, /info, /ping<br>
+          Campo 2: Administração → /ban, /mute, /clear (futuro)<br>
+          Footer: Systems_BSI • Usa /help para ver novidades
+        </code>
+      </div>
+
+      <p>
+        Na aula, você pode montar esse tipo de embed na ferramenta visual (ou mostrar
+        como seria em código, sem ainda aprofundar).
+      </p>
+    </div>
+
+    <!-- 4. Boas práticas de design -->
+    <h3 class="section-title"><span>▸</span> 4. Boas práticas de design para embeds</h3>
+    <div class="card">
+      <p>
+        Alguns cuidados fazem muita diferença na leitura:
+      </p>
+      <ul>
+        <li>Não encher o embed com texto demais (use parágrafos curtos)</li>
+        <li>Usar emojis com moderação para facilitar a leitura</li>
+        <li>Evitar cores muito fortes ou gritantes</li>
+        <li>Manter um padrão de cores, título e footer para o servidor</li>
+        <li>Usar campos para listas e resumos (em vez de parágrafo gigante)</li>
+      </ul>
+      <p>
+        Você pode definir um “padrão Systems_BSI” de embed e incentivar os
+        alunos a seguirem esse estilo.
+      </p>
+    </div>
+
+    <!-- 5. Botões e menus -->
+    <h3 class="section-title"><span>▸</span> 5. Introdução a botões e menus (components)</h3>
+    <div class="card">
+      <p>
+        Além de somente texto, o Discord permite adicionar <strong>componentes</strong> às mensagens:
+      </p>
+      <ul>
+        <li><strong>Botões:</strong> o usuário clica e o bot executa uma ação.</li>
+        <li><strong>Select menus:</strong> listas suspensas para o usuário escolher opções.</li>
+      </ul>
+
+      <p>
+        Exemplos de uso:
+      </p>
+      <ul>
+        <li>Botão “Aceito as regras” em um canal de regras</li>
+        <li>Menu para escolher linguagem de programação favorita</li>
+        <li>Botões para navegar em páginas de ajuda</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo conceitual de embed + botões:</strong><br><br>
+        <code>
+          Embed: "Escolhe a área que quer aprender:"<br>
+          Botões: [Programação] [Cybersegurança] [Bots Discord]
+        </code>
+      </div>
+
+      <p>
+        Nesta aula o foco é o conceito; a implementação de botões e menus
+        em código (Python/JS) será trabalhada em aulas futuras.
+      </p>
+    </div>
+
+    <!-- 6. Exemplo completo de resposta estilizada -->
+    <h3 class="section-title"><span>▸</span> 6. Exemplo completo: comando /help estilizado</h3>
+    <div class="card">
+      <p>
+        Vamos imaginar o comando <code>/help</code> agora com embed:
+      </p>
+
+      <div class="example-box">
+        <strong>Estrutura sugerida para /help:</strong><br><br>
+        <code>
+          Título: Ajuda do Bot – Systems_BSI 🤖<br>
+          Descrição: "Aqui tens uma visão geral dos comandos disponíveis."<br><br>
+          Campo 1:<br>
+          Nome: Utilidade<br>
+          Valor: /ping, /help, /info<br><br>
+          Campo 2:<br>
+          Nome: Aulas & Eventos<br>
+          Valor: /aulas, /evento_natal (futuro)<br><br>
+          Footer: "Dica: experimenta /info para saber mais sobre o bot."<br>
+          Cor: Verde ciano (padrão Systems)
+        </code>
+      </div>
+
+      <p>
+        Esse é o tipo de resposta que transmite profissionalismo e deixa claro
+        que o bot foi pensado com carinho para o servidor.
+      </p>
+    </div>
+
+    <!-- 7. Resumo -->
+    <h3 class="section-title"><span>▸</span> 7. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Aprendemos o que são <strong>embeds</strong> e para que servem</li>
+        <li>Vimos os elementos principais: título, descrição, cor, campos, imagens, footer</li>
+        <li>Falamos de boas práticas de design para mensagens do bot</li>
+        <li>Introduzimos o conceito de <strong>botões</strong> e <strong>select menus</strong> (components)</li>
+        <li>Montamos um exemplo completo para o comando <code>/help</code></li>
+      </ul>
+      <p>
+        Nas próximas aulas, vamos começar a misturar tudo isso com <strong>código real</strong>
+        em Python e JavaScript, para que o bot envie embeds, registre logs e reaja
+        a eventos com mensagens estilizadas.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 4 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

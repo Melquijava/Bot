@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 6 – Criando Sistemas Personalizados | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    strong {
+      color: #e5e7eb;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 23px;
+      }
+      .page {
+        padding: 22px 12px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 6 • Módulo 2 – Sistemas Personalizados</div>
+
+    <h1>Criando Sistemas Personalizados para o Servidor</h1>
+    <p class="subtitle">
+      Objetivo da aula: planejar e estruturar <strong>sistemas personalizados</strong> para o bot,
+      focados na realidade do servidor (como o Systems_BSI), incluindo boas-vindas,
+      atribuição de cargos simples e comandos de informações sobre o servidor.
+    </p>
+
+    <!-- 1. O que é um sistema personalizado -->
+    <h3 class="section-title"><span>▸</span> 1. O que é um sistema personalizado?</h3>
+    <div class="card">
+      <p>
+        Até aqui, criamos comandos e eventos mais “genéricos”. Um
+        <strong>sistema personalizado</strong> é quando usamos esses recursos para
+        resolver problemas e necessidades <em>específicas</em> do servidor.
+      </p>
+      <p>Exemplos:</p>
+      <ul>
+        <li>Sistema de boas-vindas com embed padrão do servidor</li>
+        <li>Sistema de atribuição automática de cargo “Iniciante”</li>
+        <li>Comando que mostra informações do servidor (ex.: /serverinfo)</li>
+        <li>Fluxo de onboarding: entrar → ler regras → ganhar cargo</li>
+      </ul>
+      <p>
+        Nesta aula, vamos desenhar esses sistemas conceitualmente, já
+        preparando terreno para o código em Python/JS nas próximas aulas.
+      </p>
+    </div>
+
+    <!-- 2. Sistema de boas-vindas avançado -->
+    <h3 class="section-title"><span>▸</span> 2. Sistema de boas-vindas avançado</h3>
+    <div class="card">
+      <p>
+        Diferente do simples “mensagem de boas-vindas”, aqui vamos pensar em um
+        sistema completo de recepção:
+      </p>
+      <ul>
+        <li>Canal de boas-vindas (ex.: <code>#👋bem-vindo</code>)</li>
+        <li>Embed padrão do servidor (cor, logo, texto)</li>
+        <li>Menção do novo membro e direcionamento para regras/canais importantes</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de embed para boas-vindas:</strong><br><br>
+        <code>
+          Título: Bem-vindo(a) ao Systems_BSI, @membro! 👋<br>
+          Descrição: Fala um pouco sobre a comunidade e o objetivo do servidor.<br>
+          Campos:<br>
+          - Começa por aqui → #📌regras, #📚guia-inicial<br>
+          - Dúvidas → #❓dúvidas-programação<br><br>
+          Footer: "Bom código, boas conexões. 💻"
+        </code>
+      </div>
+
+      <p>
+        Conceito do sistema:
+      </p>
+      <ul>
+        <li>Evento de entrada de membro é disparado</li>
+        <li>Bot monta embed padrão</li>
+        <li>Bot envia embed no canal de boas-vindas e menciona o novo membro</li>
+      </ul>
+    </div>
+
+    <!-- 3. Sistema simples de cargos automáticos -->
+    <h3 class="section-title"><span>▸</span> 3. Sistema de atribuição automática de cargos (básico)</h3>
+    <div class="card">
+      <p>
+        Um dos sistemas mais comuns em bots é a atribuição de cargos
+        automaticamente, por exemplo:
+      </p>
+      <ul>
+        <li>Cargo “Membro” para todo mundo que entra</li>
+        <li>Cargo “Aluno” para quem clica num botão ou reage a uma mensagem</li>
+      </ul>
+
+      <p>Algumas formas comuns de fazer isso:</p>
+      <ul>
+        <li><strong>Auto-role na entrada:</strong> ao entrar, recebe cargo padrão.</li>
+        <li><strong>Role por reação:</strong> reagir a uma mensagem (ou clicar num botão) para ganhar cargo.</li>
+        <li><strong>Comando:</strong> ex.: <code>/entrar_aulas</code> para ganhar cargo específico.</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Fluxo simples de auto-role:</strong><br><br>
+        <code>
+          Evento: membro entrou<br>
+          Ação: bot atribui o cargo "Membro" automaticamente<br>
+          Log: bot registra em #🧩logs-comandos ou #📜logs-gerais
+        </code>
+      </div>
+
+      <p>
+        A implementação exata depende de permissões do bot (Manage Roles) e
+        será feita em código nas próximas aulas, mas o conceito já pode ser
+        explicado e desenhado aqui.
+      </p>
+    </div>
+
+    <!-- 4. Comando de informações do servidor -->
+    <h3 class="section-title"><span>▸</span> 4. Comando de informações do servidor (/serverinfo)</h3>
+    <div class="card">
+      <p>
+        Outro sistema personalizado útil é um comando que mostra estatísticas e
+        informações do servidor em um embed bonito.
+      </p>
+      <p><strong>Exemplo de comando:</strong> <code>/serverinfo</code></p>
+
+      <div class="example-box">
+        <strong>Estrutura sugerida de /serverinfo:</strong><br><br>
+        <code>
+          Título: Informações do Servidor 🌐<br>
+          Campos:<br>
+          - Nome do servidor<br>
+          - Data de criação<br>
+          - Número de membros<br>
+          - Número de canais<br>
+          - Dono do servidor<br><br>
+          Footer: "Dados atualizados em tempo real pelo bot."
+        </code>
+      </div>
+
+      <p>
+        Esse tipo de comando é excelente para treinar acesso a dados do
+        servidor via bot (que depois será codificado em Python/JS usando
+        as bibliotecas oficiais).
+      </p>
+    </div>
+
+    <!-- 5. Fluxos e experiência do usuário -->
+    <h3 class="section-title"><span>▸</span> 5. Pensando em fluxo de usuário (onboarding)</h3>
+    <div class="card">
+      <p>
+        Não se trata só de “ter funções”, mas de como elas se conectam.
+        Exemplo de fluxo de onboarding:
+      </p>
+      <ul>
+        <li>Usuário entra no servidor</li>
+        <li>Recebe boas-vindas em um canal com embed</li>
+        <li>Embed contém link/citação para canal de regras</li>
+        <li>No canal de regras, há botão ou comando para “aceitar”</li>
+        <li>Ao aceitar, o bot dá o cargo “Membro/Aluno”</li>
+      </ul>
+
+      <p>
+        Essa forma de pensar transforma o bot em parte da experiência do
+        servidor, e não apenas uma coleção de comandos soltos.
+      </p>
+    </div>
+
+    <!-- 6. Conectando com logs e organização -->
+    <h3 class="section-title"><span>▸</span> 6. Conectando sistemas com logs e embeds</h3>
+    <div class="card">
+      <p>
+        Os sistemas personalizados podem (e devem) aproveitar o que
+        aprendemos nas aulas anteriores:
+      </p>
+      <ul>
+        <li><strong>Embeds</strong> (Aula 4) para deixar visual bonito</li>
+        <li><strong>Logs</strong> (Aula 5) para registrar o que está acontecendo</li>
+        <li><strong>Eventos</strong> (Aula 3) para reagir automaticamente</li>
+        <li><strong>Slash commands</strong> (Aula 2) para acionar funções sob demanda</li>
+      </ul>
+
+      <p>
+        Exemplo: ao dar cargo automaticamente, o bot pode:
+      </p>
+      <ul>
+        <li>Enviar embed de confirmação para o usuário</li>
+        <li>Registrar em <code>#🧩logs-comandos</code> que deu o cargo X para o usuário Y</li>
+      </ul>
+    </div>
+
+    <!-- 7. Resumo -->
+    <h3 class="section-title"><span>▸</span> 7. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Definimos o que é um <strong>sistema personalizado</strong> no contexto do bot</li>
+        <li>Planejamos um sistema de <strong>boas-vindas avançado</strong></li>
+        <li>Desenhamos um sistema básico de <strong>auto-role</strong> (cargos automáticos)</li>
+        <li>Criamos a ideia de um comando <strong>/serverinfo</strong> com embed</li>
+        <li>Pensamos em fluxos de <strong>onboarding</strong> para novos membros</li>
+        <li>Conectamos eventos, embeds e logs em sistemas mais completos</li>
+      </ul>
+      <p>
+        A partir das próximas aulas, começaremos a transformar esses sistemas
+        em <strong>código real</strong> (Python e JavaScript), implementando tudo o que foi
+        planejado neste módulo dentro do bot.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 6 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

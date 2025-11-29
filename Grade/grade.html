@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grade – Aulas de Criação de Bots | Systems_BSI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Estilos básicos – pode substituir pelo CSS do seu painel -->
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0, #020617 40%, #000 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    h1 {
+      margin: 12px 0 4px;
+      font-size: 26px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta span::before {
+      content: "•";
+      color: var(--accent);
+      font-size: 16px;
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .card-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .topic-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+    }
+
+    .topic-list li {
+      margin-bottom: 3px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin: 26px 0 10px;
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .footer-info {
+      margin-top: 26px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+      padding-top: 12px;
+    }
+
+    .footer-info strong {
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 20px 12px 32px;
+      }
+      h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Systems_BSI • Grade Oficial
+    </div>
+
+    <h1>Aulas Semanais de Criação de Bots (Python & JavaScript)</h1>
+    <p class="subtitle">
+      Programa contínuo de formação em bots para Discord, do nível iniciante ao avançado,
+      usando Python, Node.js e o ecossistema oficial do Discord.
+    </p>
+
+    <div class="meta">
+      <span>Domingos • Aulas semanais</span>
+      <span>Formato prático e guiado</span>
+      <span>Foco em bots reais para o servidor</span>
+    </div>
+
+    <!-- MÓDULO 1 -->
+    <h2 class="section-title"><span>▸</span> Módulo 1 – Primeiros Passos (Iniciantes)</h2>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 1 – Criação do Bot (Primeiro Bot)</h3>
+        <span class="card-tag">Ponto de partida</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Ensinar a criar o primeiro bot usando o <strong>Development for Discord</strong>,
+        entender o que é um bot e como ele se conecta ao servidor.
+      </p>
+      <ul class="topic-list">
+        <li>O que é um bot do Discord e como funciona</li>
+        <li>Criando o bot pelo painel de aplicações do Discord</li>
+        <li>Configurando intents, permissões e escopos</li>
+        <li>Gerando o link de convite e adicionando o bot no servidor</li>
+        <li>Criando e testando o primeiro comando básico</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 2 – Estrutura de Comandos (Slash Commands)</h3>
+        <span class="card-tag">Fundamentos</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Entender como funcionam os slash commands, organizar comandos do bot
+        e criar uma base sólida para todas as próximas aulas.
+      </p>
+      <ul class="topic-list">
+        <li>Criação de comandos básicos: <code>/ping</code>, <code>/help</code>, <code>/info</code></li>
+        <li>Diferença entre comandos globais e de guild</li>
+        <li>Respostas públicas x respostas privadas (ephemeral)</li>
+        <li>Organização de comandos por categorias</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 3 – Eventos Básicos</h3>
+        <span class="card-tag">Reatividade</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Apresentar o conceito de eventos e fazer o bot reagir automaticamente
+        a ações que acontecem no servidor.
+      </p>
+      <ul class="topic-list">
+        <li>Eventos de entrada e saída de membros</li>
+        <li>Eventos de mensagens (on message)</li>
+        <li>Logs simples via console</li>
+        <li>Boas práticas para não “spammar” o servidor</li>
+      </ul>
+    </section>
+
+    <!-- MÓDULO 2 -->
+    <h2 class="section-title"><span>▸</span> Módulo 2 – Interações e Funções Úteis</h2>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 4 – Embeds e Mensagens Estilizadas</h3>
+        <span class="card-tag">Visual</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Criar respostas mais profissionais, usando embeds, imagens e componentes interativos.
+      </p>
+      <ul class="topic-list">
+        <li>Criação de embeds com títulos, descrições, cores e campos</li>
+        <li>Uso de imagens, thumbnails e footer</li>
+        <li>Introdução a botões e menus de seleção</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 5 – Sistema de Registros e Logs</h3>
+        <span class="card-tag">Organização</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Ensinar o bot a registrar ações importantes em canais de log.
+      </p>
+      <ul class="topic-list">
+        <li>Canal de logs para comandos utilizados</li>
+        <li>Registro de entradas/saídas de membros</li>
+        <li>Estrutura básica para outros tipos de logs</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 6 – Criando Sistemas Personalizados</h3>
+        <span class="card-tag">Aplicação prática</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Construir funções úteis focadas no servidor da comunidade.
+      </p>
+      <ul class="topic-list">
+        <li>Sistema de boas-vindas personalizado</li>
+        <li>Atribuição automática de cargos em condições simples</li>
+        <li>Comandos de informações gerais do servidor</li>
+      </ul>
+    </section>
+
+    <!-- MÓDULO 3 -->
+    <h2 class="section-title"><span>▸</span> Módulo 3 – Bots Inteligentes e Integrações</h2>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 7 – Conexão com APIs Externas</h3>
+        <span class="card-tag">Integrações</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Ensinar o bot a buscar informações fora do Discord (internet, APIs públicas).
+      </p>
+      <ul class="topic-list">
+        <li>Consumo de APIs simples (clima, moedas, etc.)</li>
+        <li>Criação de comandos como <code>/clima</code> e <code>/preço</code></li>
+        <li>Tratamento básico de erros ao chamar APIs</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 8 – Mini Banco de Dados (JSON)</h3>
+        <span class="card-tag">Persistência simples</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Mostrar como salvar informações em arquivos locais usando JSON.
+      </p>
+      <ul class="topic-list">
+        <li>Estrutura de dados em JSON</li>
+        <li>Sistema de economia/XP simples</li>
+        <li>Leitura e escrita de dados para cada usuário</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 9 – Banco de Dados Profissional (SQLite/MongoDB)</h3>
+        <span class="card-tag">Escala</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Dar o próximo passo usando bancos de dados reais, preparados para bots maiores.
+      </p>
+      <ul class="topic-list">
+        <li>Conceitos básicos de SQLite e/ou MongoDB</li>
+        <li>Criação de tabelas/coleções para usuários</li>
+        <li>Sistema de níveis persistente</li>
+      </ul>
+    </section>
+
+    <!-- MÓDULO 4 -->
+    <h2 class="section-title"><span>▸</span> Módulo 4 – Projetos Avançados</h2>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 10 – Dashboard Web do Bot</h3>
+        <span class="card-tag">Fullstack</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Conectar o bot a uma interface web simples para visualização de dados.
+      </p>
+      <ul class="topic-list">
+        <li>Página web básica (HTML/JS) integrada ao bot</li>
+        <li>Exibição de status, comandos, métricas simples</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 11 – Criação de um Bot Completo</h3>
+        <span class="card-tag">Projeto final</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Desenvolver um bot completo escolhido em conjunto com os alunos (moderação, economia, eventos, etc.).
+      </p>
+      <ul class="topic-list">
+        <li>Definição do tipo de bot</li>
+        <li>Planejamento de funcionalidades</li>
+        <li>Implementação guiada em aula</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">Aula 12 – Publicação, Hospedagem e Segurança</h3>
+        <span class="card-tag">Produção</span>
+      </div>
+      <p class="card-desc">
+        Objetivo: Mostrar como deixar o bot online 24/7 de forma segura.
+      </p>
+      <ul class="topic-list">
+        <li>Hospedagem em serviços como Railway/Render/VPS</li>
+        <li>Uso de variáveis de ambiente para proteger o token</li>
+        <li>Boas práticas, manutenção e atualizações</li>
+      </ul>
+    </section>
+
+    <div class="footer-info">
+      <p>
+        Esta grade pode ser ajustada conforme o andamento das turmas e o nível dos participantes.
+        Para dúvidas ou sugestões, utilize os canais oficiais do <strong>Systems_BSI</strong>.
+      </p>
+    </div>
+  </main>
+</body>
+</html>

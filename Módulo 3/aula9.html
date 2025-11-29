@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 9 – Banco de Dados Profissional (SQLite / MongoDB) | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    strong {
+      color: #e5e7eb;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 23px;
+      }
+      .page {
+        padding: 22px 12px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 9 • Módulo 3 – Bancos de Dados</div>
+
+    <h1>Banco de Dados Profissional (SQLite & MongoDB)</h1>
+    <p class="subtitle">
+      Objetivo da aula: entender por que e quando sair do JSON e migrar para um
+      <strong>banco de dados profissional</strong>, conhecendo os conceitos básicos de
+      <strong>SQLite</strong> (relacional) e <strong>MongoDB</strong> (NoSQL), e como isso se aplica ao bot.
+    </p>
+
+    <!-- 1. Por que sair do JSON -->
+    <h3 class="section-title"><span>▸</span> 1. Por que JSON não é suficiente em projetos grandes?</h3>
+    <div class="card">
+      <p>
+        JSON é ótimo para começar, mas tem limitações quando o bot cresce:
+      </p>
+      <ul>
+        <li>Arquivos podem ficar grandes demais</li>
+        <li>Díficil lidar com muitas leituras/escritas ao mesmo tempo</li>
+        <li>Maior risco de corromper dados</li>
+        <li>Não foi feito para consultas complexas (filtros, ordenações, etc.)</li>
+      </ul>
+      <p>
+        Quando o bot começa a ter muitos usuários, sistemas de XP complexos,
+        rankings, loja de itens, várias guilds, etc., é hora de pensar em um
+        <strong>banco de dados</strong> de verdade.
+      </p>
+    </div>
+
+    <!-- 2. Tipos de banco: relacional x NoSQL -->
+    <h3 class="section-title"><span>▸</span> 2. Bancos relacionais x bancos NoSQL</h3>
+    <div class="card">
+      <p>
+        De forma bem resumida, temos dois grandes estilos de banco:
+      </p>
+      <ul>
+        <li><strong>Relacional (SQL):</strong> tabelas, colunas, linhas, relacionamentos.</li>
+        <li><strong>NoSQL (documentos, chave-valor, etc.):</strong> mais flexível, foco em documentos/objetos.</li>
+      </ul>
+
+      <p>Nesta aula vamos focar em:</p>
+      <ul>
+        <li><strong>SQLite:</strong> banco relacional leve, salvo em um arquivo.</li>
+        <li><strong>MongoDB:</strong> banco de documentos (NoSQL), muito usado em apps web modernas.</li>
+      </ul>
+    </div>
+
+    <!-- 3. SQLite -->
+    <h3 class="section-title"><span>▸</span> 3. SQLite – banco relacional em um arquivo</h3>
+    <div class="card">
+      <p>
+        <strong>SQLite</strong> é um banco de dados relacional que roda direto em arquivo,
+        sem precisar de servidor separado. Ideal para:
+      </p>
+      <ul>
+        <li>Bots médios</li>
+        <li>Projetos pessoais</li>
+        <li>Ambiente de estudo e protótipo</li>
+      </ul>
+
+      <p>Conceitos importantes:</p>
+      <ul>
+        <li><strong>Tabelas:</strong> como “planilhas” (ex.: <code>usuarios</code>, <code>servidores</code>)</li>
+        <li><strong>Linhas:</strong> cada registro (um usuário, um servidor)</li>
+        <li><strong>Colunas:</strong> campos/atributos (xp, nível, moedas, etc.)</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de tabela de usuários (conceitual):</strong><br><br>
+        <code>
+          Tabela: usuarios<br>
+          Colunas: id_usuario, xp, nivel, coins<br><br>
+          Registro 1: (1234567890, 250, 5, 1500)<br>
+          Registro 2: (9876543210, 80, 2, 270)
+        </code>
+      </div>
+
+      <p>
+        Em código (Python/JS), você faz consultas usando <strong>SQL</strong>, como:
+        <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>.
+      </p>
+    </div>
+
+    <!-- 4. MongoDB -->
+    <h3 class="section-title"><span>▸</span> 4. MongoDB – banco de documentos (NoSQL)</h3>
+    <div class="card">
+      <p>
+        <strong>MongoDB</strong> é um banco de dados orientado a documentos,
+        ótimo para trabalhar com estruturas parecidas com JSON.
+      </p>
+
+      <p>Conceitos básicos:</p>
+      <ul>
+        <li><strong>Banco:</strong> conjunto de coleções (ex.: <code>botsystems</code>)</li>
+        <li><strong>Coleções:</strong> “tabelas” de documentos (ex.: <code>usuarios</code>, <code>configs</code>)</li>
+        <li><strong>Documentos:</strong> objetos JSON com os dados (cada usuário, cada config)</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de documento de usuário em MongoDB:</strong><br><br>
+        <code>
+          {<br>
+          &nbsp;&nbsp;"_id": "1234567890",<br>
+          &nbsp;&nbsp;"xp": 250,<br>
+          &nbsp;&nbsp;"nivel": 5,<br>
+          &nbsp;&nbsp;"coins": 1500,<br>
+          &nbsp;&nbsp;"ultima_mensagem": "2025-11-29T20:31:00Z"<br>
+          }
+        </code>
+      </div>
+
+      <p>
+        Em vez de tabelas rígidas, cada documento pode ter campos diferentes,
+        o que dá mais flexibilidade para bots com muitos tipos de dados.
+      </p>
+    </div>
+
+    <!-- 5. Quando usar SQLite vs MongoDB -->
+    <h3 class="section-title"><span>▸</span> 5. Quando escolher SQLite, quando escolher MongoDB?</h3>
+    <div class="card">
+      <p><strong>SQLite é ideal se:</strong></p>
+      <ul>
+        <li>O bot é de médio porte e roda em uma instância só</li>
+        <li>Você quer algo simples de configurar (apenas um arquivo .db)</li>
+        <li>Você gosta do modelo de tabelas e SQL tradicional</li>
+      </ul>
+
+      <p><strong>MongoDB é ideal se:</strong></p>
+      <ul>
+        <li>O bot vai crescer bastante, com muitos dados variados</li>
+        <li>Você quer flexibilidade de documentos (tipo JSON)</li>
+        <li>Pensa em integrar com aplicações web mais complexas</li>
+      </ul>
+
+      <p>
+        Para muitos bots de comunidade (como o do Systems_BSI), tanto SQLite quanto
+        MongoDB podem funcionar bem — a escolha depende do seu estilo e objetivo
+        de aprendizado.
+      </p>
+    </div>
+
+    <!-- 6. Exemplo de modelos para o bot -->
+    <h3 class="section-title"><span>▸</span> 6. Modelando dados do bot em SQLite e MongoDB</h3>
+    <div class="card">
+      <p>
+        Vamos imaginar que queremos guardar XP, nível e coins de cada usuário,
+        e também algumas configurações por servidor.
+      </p>
+
+      <div class="example-box">
+        <strong>Modelo em SQLite (conceito):</strong><br><br>
+        <code>
+          Tabela: usuarios<br>
+          - id_usuario (PRIMARY KEY)<br>
+          - xp (INTEGER)<br>
+          - nivel (INTEGER)<br>
+          - coins (INTEGER)<br><br>
+          Tabela: servidores<br>
+          - id_servidor (PRIMARY KEY)<br>
+          - canal_logs (TEXT)<br>
+          - canal_boas_vindas (TEXT)<br>
+          - cargo_padrao (TEXT)
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Modelo em MongoDB (conceito):</strong><br><br>
+        <code>
+          Coleção: usuarios<br>
+          Documento:<br>
+          {<br>
+          &nbsp;&nbsp;"_id": "id_usuario",<br>
+          &nbsp;&nbsp;"xp": 250,<br>
+          &nbsp;&nbsp;"nivel": 5,<br>
+          &nbsp;&nbsp;"coins": 1500<br>
+          }<br><br>
+          Coleção: servidores<br>
+          Documento:<br>
+          {<br>
+          &nbsp;&nbsp;"_id": "id_servidor",<br>
+          &nbsp;&nbsp;"canal_logs": "1234567890",<br>
+          &nbsp;&nbsp;"canal_boas_vindas": "0987654321",<br>
+          &nbsp;&nbsp;"cargo_padrao": "1122334455"<br>
+          }
+        </code>
+      </div>
+
+      <p>
+        Perceba que a estrutura é muito parecida com aquilo que fizemos com JSON,
+        só que agora com as vantagens de um banco de dados de verdade.
+      </p>
+    </div>
+
+    <!-- 7. Resumo -->
+    <h3 class="section-title"><span>▸</span> 7. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Entendemos por que JSON não é suficiente para bots grandes</li>
+        <li>Vimos a diferença entre bancos <strong>relacionais (SQL)</strong> e <strong>NoSQL</strong></li>
+        <li>Conhecemos o <strong>SQLite</strong> como opção leve e simples baseada em tabelas</li>
+        <li>Conhecemos o <strong>MongoDB</strong> como opção flexível baseada em documentos</li>
+        <li>Discutimos quando usar cada um, de acordo com o tamanho e objetivo do bot</li>
+        <li>Modelamos dados do bot em ambos os formatos (usuarios e servidores)</li>
+      </ul>
+      <p>
+        Nas próximas aulas/projetos, esses conceitos podem ser implementados
+        em código real (Python/JavaScript) para que o bot tenha um
+        <strong>banco de dados profissional</strong> por trás dos sistemas de XP, economia,
+        rankings e muito mais.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 9 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

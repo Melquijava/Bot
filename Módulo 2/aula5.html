@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 5 – Sistema de Registros e Logs | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    strong {
+      color: #e5e7eb;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 23px;
+      }
+      .page {
+        padding: 22px 12px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 5 • Módulo 2 – Interações & Organização</div>
+
+    <h1>Sistema de Registros e Logs</h1>
+    <p class="subtitle">
+      Objetivo da aula: ensinar a planejar e organizar um <strong>sistema de logs</strong> para o bot,
+      registrando ações importantes em canais específicos e no console, como uso
+      de comandos, entradas/saídas de membros e eventos relevantes do servidor.
+    </p>
+
+    <!-- 1. Por que usar logs? -->
+    <h3 class="section-title"><span>▸</span> 1. Por que o bot precisa de logs?</h3>
+    <div class="card">
+      <p>
+        À medida que o bot fica mais complexo, fica impossível “adivinhar”
+        tudo o que ele está fazendo. É aí que entram os <strong>logs</strong>:
+      </p>
+      <ul>
+        <li>Descobrir quem usou determinado comando</li>
+        <li>Ver quando alguém entrou/saiu do servidor</li>
+        <li>Identificar erros e comportamentos estranhos</li>
+        <li>Monitorar uso do bot (estatísticas básicas)</li>
+      </ul>
+      <p>
+        Nesta aula, vamos pensar o sistema de logs como se fosse uma “caixa
+        preta” do bot, registrando os eventos principais em:
+      </p>
+      <ul>
+        <li><strong>Console</strong> (para o desenvolvedor)</li>
+        <li><strong>Canal de texto</strong> (para a staff do servidor)</li>
+      </ul>
+    </div>
+
+    <!-- 2. Criando canais de log -->
+    <h3 class="section-title"><span>▸</span> 2. Criando canais de log no servidor</h3>
+    <div class="card">
+      <p>
+        Antes de configurar qualquer coisa no código, vamos organizar o servidor.
+        Recomenda-se criar canais específicos, por exemplo:
+      </p>
+      <ul>
+        <li><code>#📜logs-gerais</code> – para entradas, saídas, avisos gerais</li>
+        <li><code>#🧩logs-comandos</code> – para registrar o uso de comandos</li>
+        <li><code>#⚠️logs-erros</code> – para mensagens de erro importantes</li>
+      </ul>
+
+      <p>
+        Também é importante ajustar as permissões para que:
+      </p>
+      <ul>
+        <li>Somente a staff veja esses canais</li>
+        <li>Usuários comuns não consigam enviar mensagens neles (apenas o bot)</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Boa prática:</strong><br><br>
+        <code>
+          Criar uma categoria "LOGS" e colocar todos os canais de log ali,
+          separados dos chats normais.
+        </code>
+      </div>
+    </div>
+
+    <!-- 3. Tipos de coisas para logar -->
+    <h3 class="section-title"><span>▸</span> 3. O que faz sentido registrar?</h3>
+    <div class="card">
+      <p>
+        Não é tudo que precisa virar log. Alguns exemplos de coisas úteis:
+      </p>
+      <ul>
+        <li>Bot iniciou (ficou online)</li>
+        <li>Usuário entrou no servidor</li>
+        <li>Usuário saiu do servidor</li>
+        <li>Comandos importantes usados (ex.: /ban, /clear, /config)</li>
+        <li>Erros ao chamar APIs ou acessar banco de dados</li>
+      </ul>
+
+      <p>
+        Isso ajuda a staff a entender:
+      </p>
+      <ul>
+        <li>Se o bot está online e funcionando</li>
+        <li>Se há muita gente entrando/saindo</li>
+        <li>Se comandos críticos estão sendo usados corretamente</li>
+      </ul>
+    </div>
+
+    <!-- 4. Modelo de mensagem de log -->
+    <h3 class="section-title"><span>▸</span> 4. Modelos de mensagens de log</h3>
+    <div class="card">
+      <p>
+        Mais importante do que <em>ter</em> log é ter log <strong>legível</strong>.
+        Alguns modelos que você pode usar:
+      </p>
+
+      <div class="example-box">
+        <strong>Log de entrada de membro:</strong><br><br>
+        <code>
+          [ENTRADA] O usuário @Fulano (ID: 123456789) entrou no servidor em 29/11/2025 – 20:35.
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Log de saída de membro:</strong><br><br>
+        <code>
+          [SAÍDA] O usuário @Ciclano (ID: 987654321) saiu do servidor em 29/11/2025 – 21:10.
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Log de uso de comando:</strong><br><br>
+        <code>
+          [COMANDO] @Beltrano usou /help no canal #geral em 29/11/2025 – 19:02.
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Log de erro:</strong><br><br>
+        <code>
+          [ERRO] Falha ao buscar clima na API para o comando /clima. Detalhes: Timeout.
+        </code>
+      </div>
+
+      <p>
+        Você pode usar texto simples ou <strong>embeds</strong> (como visto na Aula 4) para deixar
+        os logs ainda mais organizados.
+      </p>
+    </div>
+
+    <!-- 5. Logs no console x logs no canal -->
+    <h3 class="section-title"><span>▸</span> 5. Logs no console x Logs em canal</h3>
+    <div class="card">
+      <p>
+        Existem dois “lugares” principais onde o bot pode registrar informações:
+      </p>
+      <ul>
+        <li><strong>Console:</strong> só o desenvolvedor vê (quando está rodando o bot).</li>
+        <li><strong>Canais de log:</strong> a staff pode acompanhar dentro do Discord.</li>
+      </ul>
+
+      <p>Vantagens de cada um:</p>
+      <ul>
+        <li><strong>Console:</strong> melhor para debugging, detalhes técnicos e stack trace de erros.</li>
+        <li><strong>Canais:</strong> melhor para monitoramento do dia a dia do servidor.</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de mensagem no console (conceito):</strong><br><br>
+        <code>
+          [INFO] Bot iniciado com sucesso. Logado como SystemsBot#2025
+        </code>
+      </div>
+    </div>
+
+    <!-- 6. Boas práticas de logs -->
+    <h3 class="section-title"><span>▸</span> 6. Boas práticas ao criar logs</h3>
+    <div class="card">
+      <p>
+        Alguns cuidados importantes:
+      </p>
+      <ul>
+        <li>Não logar dados sensíveis (tokens, senhas, etc.)</li>
+        <li>Evitar flood de log para não travar o canal e o console</li>
+        <li>Manter um padrão de prefixo nos logs: [ENTRADA], [SAÍDA], [COMANDO], [ERRO]</li>
+        <li>Usar horário/data no log para facilitar análise posterior</li>
+        <li>Separar tipos de log em canais diferentes (geral, comandos, erros)</li>
+      </ul>
+
+      <p>
+        Essas práticas vão ser muito úteis quando começarmos a conectar o bot
+        com banco de dados e APIs externas.
+      </p>
+    </div>
+
+    <!-- 7. Resumo -->
+    <h3 class="section-title"><span>▸</span> 7. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Entendemos a importância de ter um <strong>sistema de logs</strong> no bot</li>
+        <li>Criamos a ideia de canais dedicados para logs no servidor</li>
+        <li>Definimos o que vale a pena registrar (entradas, saídas, comandos, erros)</li>
+        <li>Vimos modelos práticos de mensagens de log</li>
+        <li>Diferenciamos logs no <strong>console</strong> e em <strong>canais de texto</strong></li>
+        <li>Falamos sobre boas práticas para manter logs úteis e organizados</li>
+      </ul>
+      <p>
+        Na próxima aula, vamos usar essa base de logs para começar a criar
+        <strong>sistemas personalizados</strong>, como boas-vindas avançadas, atribuição de cargos
+        e comandos de informação sobre o servidor.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 5 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

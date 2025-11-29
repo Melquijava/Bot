@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 2 – Estrutura de Comandos (Slash Commands) | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    strong {
+      color: #e5e7eb;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 23px;
+      }
+      .page {
+        padding: 22px 12px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 2 • Módulo Iniciante</div>
+
+    <h1>Estrutura de Comandos (Slash Commands)</h1>
+    <p class="subtitle">
+      Objetivo da aula: entender como funcionam os slash commands, criar comandos
+      organizados (<code>/ping</code>, <code>/help</code>, <code>/info</code>), e aprender a diferença
+      entre comandos globais, de guild e respostas públicas ou privadas (ephemeral).
+    </p>
+
+    <!-- REVISÃO -->
+    <h3 class="section-title"><span>▸</span> 1. Revisão rápida da Aula 1</h3>
+    <div class="card">
+      <p>Nesta aula partimos do ponto em que você já tem:</p>
+      <ul>
+        <li>Um bot criado no <strong>Discord Developer Portal</strong></li>
+        <li>Intents configuradas</li>
+        <li>Bot adicionado no seu servidor</li>
+        <li>Um comando básico <code>/ping</code> funcional</li>
+      </ul>
+      <p>
+        Agora vamos transformar esse “bot simples” em algo organizado, com uma base
+        de comandos pronta para crescer.
+      </p>
+    </div>
+
+    <!-- O QUE É SLASH -->
+    <h3 class="section-title"><span>▸</span> 2. O que são Slash Commands?</h3>
+    <div class="card">
+      <p>
+        <strong>Slash commands</strong> são comandos que aparecem ao digitar <code>/</code> no Discord,
+        com autocomplete, descrição, categorias e argumentos.
+      </p>
+      <p>Principais vantagens:</p>
+      <ul>
+        <li>Experiência mais profissional e organizada</li>
+        <li>Usuário não precisa decorar comandos</li>
+        <li>Melhor integração com o cliente oficial do Discord</li>
+        <li>Controle fino de permissões e visibilidade</li>
+      </ul>
+      <p>
+        Vamos criar uma pequena “coleção” de comandos básicos para o seu bot:
+        <strong>/ping</strong>, <strong>/help</strong> e <strong>/info</strong>.
+      </p>
+    </div>
+
+    <!-- CRIAÇÃO PING HELP INFO -->
+    <h3 class="section-title"><span>▸</span> 3. Criando comandos básicos: /ping, /help, /info</h3>
+    <div class="card">
+      <p>
+        Acesse novamente o painel de desenvolvimento/comandos que você utilizou
+        na Aula 1 (como o <strong>Development for Discord</strong> ou área de comandos de aplicação).
+      </p>
+
+      <div class="example-box">
+        <strong>Comando 1: /ping</strong><br>
+        <ul>
+          <li><strong>Nome:</strong> <code>ping</code></li>
+          <li><strong>Descrição:</strong> Testa se o bot está respondendo</li>
+          <li><strong>Resposta:</strong> <code>Pong! 🏓</code></li>
+        </ul>
+      </div>
+
+      <div class="example-box">
+        <strong>Comando 2: /help</strong><br>
+        <ul>
+          <li><strong>Nome:</strong> <code>help</code></li>
+          <li><strong>Descrição:</strong> Mostra a lista de comandos disponíveis</li>
+          <li><strong>Resposta (texto simples):</strong></li>
+        </ul>
+        <code>
+          Comandos disponíveis: /ping, /help, /info. Mais em breve! 🚀
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Comando 3: /info</strong><br>
+        <ul>
+          <li><strong>Nome:</strong> <code>info</code></li>
+          <li><strong>Descrição:</strong> Exibe informações sobre o servidor ou o bot</li>
+          <li><strong>Resposta sugerida:</strong></li>
+        </ul>
+        <code>
+          Eu sou o bot oficial deste servidor, criado nas aulas do Systems_BSI Academy. 🤖
+        </code>
+      </div>
+
+      <p>
+        Depois de criar os comandos, salve/publicar e aguarde alguns segundos.
+        Em seguida, teste no seu servidor digitando <code>/ping</code>, <code>/help</code> e <code>/info</code>.
+      </p>
+    </div>
+
+    <!-- GLOBAIS X GUILD -->
+    <h3 class="section-title"><span>▸</span> 4. Comandos Globais x Comandos de Guild</h3>
+    <div class="card">
+      <p>
+        Dependendo da configuração, seus comandos podem ser:
+      </p>
+      <ul>
+        <li>
+          <strong>Globais:</strong> valem para todos os servidores onde o bot está.
+          <br>• Demoram alguns minutos para atualizar/propagar.
+        </li>
+        <li>
+          <strong>De Guild (Por Servidor):</strong> valem apenas para um servidor específico.
+          <br>• Atualizam quase instantaneamente, ideal para desenvolvimento.
+        </li>
+      </ul>
+      <p>
+        Para desenvolvimento (especialmente nas aulas), é recomendado usar
+        <strong>comandos de guild</strong> no servidor de testes do Systems_BSI, para não precisar
+        esperar propagação global.
+      </p>
+    </div>
+
+    <!-- RESPOSTAS EPHEMERAL -->
+    <h3 class="section-title"><span>▸</span> 5. Respostas públicas x respostas privadas (ephemeral)</h3>
+    <div class="card">
+      <p>
+        Quando o bot responde a um comando, a resposta pode ser:
+      </p>
+      <ul>
+        <li><strong>Pública:</strong> todos no canal veem a resposta.</li>
+        <li><strong>Privada (ephemeral):</strong> só a pessoa que usou o comando enxerga.</li>
+      </ul>
+      <p>
+        Respostas privadas são ótimas para:
+      </p>
+      <ul>
+        <li>Mensagens de erro</li>
+        <li>Informações “sensíveis” ou pessoais</li>
+        <li>Comandos de configuração</li>
+      </ul>
+      <p>
+        Mesmo que no <strong>Development for Discord</strong> isso possa aparecer apenas como
+        uma opção “somente para quem usou o comando”, o conceito é o mesmo de
+        resposta ephemeral.
+      </p>
+    </div>
+
+    <!-- ORGANIZAÇÃO -->
+    <h3 class="section-title"><span>▸</span> 6. Organização da base de comandos</h3>
+    <div class="card">
+      <p>
+        À medida que o bot cresce, a lista de comandos pode ficar caótica.
+        Por isso, já vamos criar uma mentalidade de organização:
+      </p>
+      <ul>
+        <li>Agrupar comandos por função (ex.: “Utilidade”, “Moderação”, “Fun”, “Admin”)</li>
+        <li>Manter descrições curtas e claras</li>
+        <li>Evitar nomes muito longos ou confusos</li>
+        <li>Usar <code>/help</code> como central de referência dos comandos</li>
+      </ul>
+      <p>
+        Nas próximas aulas, quando começarmos a programar em Python/JS,
+        essa estrutura lógica vai facilitar MUITO a organização dos arquivos
+        e módulos do projeto.
+      </p>
+    </div>
+
+    <!-- RESUMO -->
+    <h3 class="section-title"><span>▸</span> 7. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Entendemos melhor o que são <strong>slash commands</strong></li>
+        <li>Criamos uma base de comandos: <code>/ping</code>, <code>/help</code>, <code>/info</code></li>
+        <li>Vimos a diferença entre comandos <strong>globais</strong> e de <strong>guild</strong></li>
+        <li>Falamos sobre respostas <strong>públicas</strong> e <strong>ephemeral</strong></li>
+        <li>Começamos a organizar a “mente” do bot para crescer com qualidade</li>
+      </ul>
+      <p>
+        Na próxima aula, vamos entrar em <strong>eventos básicos</strong>, para que o bot
+        reaja automaticamente a coisas que acontecem no servidor (entrada/saída de
+        membros, mensagens, etc.).
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 2 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

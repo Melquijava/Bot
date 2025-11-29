@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 12 – Publicação, Hospedagem e Segurança do Bot | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    p, ul {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 12 • Módulo 4 – Finalização</div>
+
+    <h1>Publicação, Hospedagem e Segurança do Bot</h1>
+    <p class="subtitle">
+      Objetivo da aula: preparar o bot para rodar 24h na nuvem, configurar ambiente
+      de produção, proteger o token e aplicar práticas de segurança para evitar
+      invasões, quedas ou mau uso do sistema.
+    </p>
+
+    <!-- 1. Onde hospedar -->
+    <h3 class="section-title"><span>▸</span> 1. Onde hospedar o bot?</h3>
+    <div class="card">
+      <p>Existem três níveis de hospedagem recomendados:</p>
+
+      <ul>
+        <li><strong>Nível 1 – Hospedagem gratuita</strong>
+          <ul>
+            <li>Railway</li>
+            <li>Replit</li>
+            <li>Render</li>
+          </ul>
+        </li>
+
+        <li><strong>Nível 2 – Servidor VPS barato</strong>
+          <ul>
+            <li>Hostinger VPS</li>
+            <li>DigitalOcean</li>
+            <li>Contabo</li>
+          </ul>
+        </li>
+
+        <li><strong>Nível 3 – Hospedagem profissional</strong>
+          <ul>
+            <li>AWS EC2</li>
+            <li>Google Cloud</li>
+            <li>Azure</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p>
+        Para a maioria dos alunos, recomendamos <strong>Railway (free + fácil)</strong> ou um
+        <strong>VPS básico</strong> se o bot tiver dashboard e banco de dados.
+      </p>
+    </div>
+
+    <!-- 2. Preparando o bot para produção -->
+    <h3 class="section-title"><span>▸</span> 2. Preparando o bot para produção</h3>
+    <div class="card">
+      <p>Antes de subir o bot para a nuvem, precisamos:</p>
+
+      <ul>
+        <li>Organizar as pastas (feito no Projeto Final)</li>
+        <li>Criar um arquivo de ambiente <code>.env</code></li>
+        <li>Remover tokens e chaves do código</li>
+        <li>Configurar logs</li>
+        <li>Testar os comandos no servidor local</li>
+      </ul>
+
+      <p>
+        O arquivo <strong>.env</strong> deve conter informações privadas:
+      </p>
+
+      <div class="example-box">
+        <code>
+        TOKEN=seu_token_do_bot<br>
+        MONGO_URI=sua_string_do_mongo<br>
+        API_KEY=openweather_key<br>
+        </code>
+      </div>
+
+      <p>
+        Nunca exponha esse arquivo no GitHub ou na web.
+      </p>
+    </div>
+
+    <!-- 3. Configurando hospedagem -->
+    <h3 class="section-title"><span>▸</span> 3. Configurando a hospedagem (exemplo: Railway)</h3>
+    <div class="card">
+      <p>Passos para hospedar:</p>
+
+      <ul>
+        <li>1. Criar conta no Railway</li>
+        <li>2. Criar novo projeto</li>
+        <li>3. Conectar ao GitHub ou fazer upload do ZIP</li>
+        <li>4. Definir variáveis de ambiente (TOKEN, MONGO_URI...)</li>
+        <li>5. Definir o comando de start:
+          <ul>
+            <li>NodeJS → <code>node index.js</code></li>
+            <li>Python → <code>python3 main.py</code></li>
+          </ul>
+        </li>
+        <li>6. Deploy automático habilitado</li>
+      </ul>
+
+      <p>
+        Railway reinicia o bot sozinho caso caia.
+      </p>
+    </div>
+
+    <!-- 4. Mantendo o bot 24h -->
+    <h3 class="section-title"><span>▸</span> 4. Como manter o bot 24h online</h3>
+    <div class="card">
+      <p>Para garantir que o bot fique sempre online:</p>
+
+      <ul>
+        <li>Hospedagem estável (Railway/VPS)</li>
+        <li>Sistema de auto-restart</li>
+        <li>Logs ativos para detectar erros</li>
+        <li>Monitoramento (ping) opcional</li>
+      </ul>
+
+      <p>
+        Em VPS, use PM2 (para NodeJS):
+      </p>
+
+      <div class="example-box">
+        <code>
+        npm i -g pm2<br>
+        pm2 start index.js<br>
+        pm2 startup<br>
+        pm2 save
+        </code>
+      </div>
+    </div>
+
+    <!-- 5. Segurança -->
+    <h3 class="section-title"><span>▸</span> 5. Segurança do Bot</h3>
+    <div class="card">
+      <p>Erros comuns que fazem bots serem hackeados:</p>
+
+      <ul>
+        <li>Token exposto no GitHub ❌</li>
+        <li>Permissões exageradas ❌</li>
+        <li>API privada sem autenticação ❌</li>
+        <li>Sem validação de inputs ❌</li>
+      </ul>
+
+      <p>Práticas obrigatórias:</p>
+      <ul>
+        <li>Usar arquivo <code>.env</code></li>
+        <li>Nunca mostrar tokens no painel</li>
+        <li>Filtrar comandos por cargo/ID</li>
+        <li>Desativar intents que o bot não usa</li>
+        <li>Não entregar "Administrador" sem necessidade</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Permissões recomendadas:</strong><br><br>
+        <code>
+        - Ler mensagens<br>
+        - Enviar mensagens<br>
+        - Usar comandos de barra<br>
+        - Gerenciar mensagens (opcional)<br>
+        - Ler membros do servidor<br>
+        </code>
+      </div>
+    </div>
+
+    <!-- 6. Backup -->
+    <h3 class="section-title"><span>▸</span> 6. Backup do banco de dados</h3>
+    <div class="card">
+      <p>Independente de usar JSON, SQLite ou MongoDB, o backup deve ser:</p>
+
+      <ul>
+        <li>Diário (ou automático)</li>
+        <li>Armazenado fora do servidor</li>
+        <li>Nunca exposto publicamente</li>
+      </ul>
+
+      <p>
+        MongoDB Atlas já oferece backup automático gratuito.
+      </p>
+    </div>
+
+    <!-- 7. Testes finais -->
+    <h3 class="section-title"><span>▸</span> 7. Checklist final antes do deploy</h3>
+    <div class="card">
+      <ul>
+        <li>✔ Bot funcionando localmente</li>
+        <li>✔ Todas as variáveis estão no .env</li>
+        <li>✔ Nenhum token aparece no código</li>
+        <li>✔ Permissões configuradas</li>
+        <li>✔ JSON/DB funcionando</li>
+        <li>✔ Dashboard carregando corretamente</li>
+        <li>✔ Logs ativos</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Mensagem final recomendada:</strong><br><br>
+        <code>
+        Bot publicado com sucesso.  
+        Monitorando logs...  
+        </code>
+      </div>
+    </div>
+
+    <!-- 8. Finalização -->
+    <h3 class="section-title"><span>▸</span> 8. Conclusão do Módulo e do Curso</h3>
+    <div class="card">
+      <p>
+        Com esta aula, finalizamos o módulo mais avançado do Systems_BSI Academy.  
+        Agora você tem todo o conhecimento necessário para criar, estruturar, 
+        hospedar, proteger e manter um bot profissional rodando 24h.
+      </p>
+
+      <p>
+        A partir daqui, os alunos podem:
+      </p>
+
+      <ul>
+        <li>Criar seus próprios sistemas</li>
+        <li>Expandir comandos</li>
+        <li>Construir bots completos e profissionais</li>
+        <li>Subir projetos no GitHub</li>
+        <li>Criar dashboards avançados</li>
+      </ul>
+
+      <p><strong>Parabéns — você completou o curso oficial de Bots do Systems_BSI! 🎉</strong></p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 12 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 10 – Dashboard Web do Bot | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    strong {
+      color: #e5e7eb;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 23px;
+      }
+      .page {
+        padding: 22px 12px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 10 • Módulo 4 – Dashboard & Fullstack</div>
+
+    <h1>Dashboard Web do Bot (Visão Geral & Status)</h1>
+    <p class="subtitle">
+      Objetivo da aula: entender o conceito de <strong>dashboard web</strong> para o bot, 
+      planejar uma página simples que mostra status, comandos e estatísticas, e 
+      conectar a ideia com tudo que já vimos em APIs, JSON e banco de dados.
+    </p>
+
+    <!-- 1. O que é um dashboard web do bot -->
+    <h3 class="section-title"><span>▸</span> 1. O que é um dashboard web do bot?</h3>
+    <div class="card">
+      <p>
+        Um <strong>dashboard web</strong> é uma página acessível pelo navegador onde você
+        consegue ver e, em alguns casos, controlar o bot, sem depender do Discord.
+      </p>
+      <p>Algumas coisas que podem aparecer num dashboard:</p>
+      <ul>
+        <li>Status do bot (online/offline, ping, uptime)</li>
+        <li>Número de servidores e usuários atendidos</li>
+        <li>Lista de comandos disponíveis</li>
+        <li>Configurações básicas (canais de log, prefixo, etc.)</li>
+        <li>Estatísticas simples (comandos mais usados, ranking de XP, etc.)</li>
+      </ul>
+      <p>
+        Nesta aula vamos focar em <strong>conceito e layout</strong> — depois isso pode ser
+        implementado com HTML/CSS/JS + API interna do bot.
+      </p>
+    </div>
+
+    <!-- 2. Estrutura básica da página -->
+    <h3 class="section-title"><span>▸</span> 2. Estrutura básica do dashboard</h3>
+    <div class="card">
+      <p>
+        Pense no dashboard como uma única página dividida em seções.  
+        Exemplo de seções:
+      </p>
+      <ul>
+        <li><strong>Header:</strong> nome do bot, logo e status</li>
+        <li><strong>Cards de status:</strong> uptime, ping, servidores, usuários</li>
+        <li><strong>Lista de comandos:</strong> categorias + comandos</li>
+        <li><strong>Estatísticas:</strong> comandos mais usados, top usuários</li>
+        <li><strong>Configurações (se aplicável):</strong> campos para definir canais/cargos</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de layout conceitual:</strong><br><br>
+        <code>
+          [Cabeçalho: Nome do Bot + Status]<br>
+          [Linha de cards: Uptime | Ping | Servidores | Usuários]<br>
+          [Sessão: Comandos e categorias]<br>
+          [Sessão: Estatísticas básicas]<br>
+        </code>
+      </div>
+
+      <p>
+        Em projetos mais avançados, esse dashboard pode ser feito em frameworks como
+        <strong>React</strong>, mas o conceito é o mesmo.
+      </p>
+    </div>
+
+    <!-- 3. Informações úteis para mostrar -->
+    <h3 class="section-title"><span>▸</span> 3. Quais informações puxar do bot?</h3>
+    <div class="card">
+      <p>
+        Algumas informações podem ser obtidas diretamente do bot e dos dados que
+        já armazenamos em JSON ou banco de dados:
+      </p>
+
+      <ul>
+        <li><strong>Status:</strong> se o bot está online</li>
+        <li><strong>Uptime:</strong> há quanto tempo o bot está ligado</li>
+        <li><strong>Número de servidores:</strong> quantas guilds o bot está</li>
+        <li><strong>Número de usuários únicos:</strong> quantos usuários já interagiram</li>
+        <li><strong>Top comandos:</strong> quais comandos mais usados</li>
+        <li><strong>Top usuários:</strong> ranking de XP ou economia</li>
+      </ul>
+
+      <p>
+        Essas informações podem ser expostas pelo bot através de uma API interna
+        (por exemplo, endpoints HTTP), e o dashboard as consome.
+      </p>
+    </div>
+
+    <!-- 4. Exemplo de seções de um dashboard -->
+    <h3 class="section-title"><span>▸</span> 4. Exemplo de seções para o dashboard (layout conceitual)</h3>
+    <div class="card">
+      <p>
+        Mesmo antes de escrever código, já é bom definir como a página será visualmente.
+      </p>
+
+      <div class="example-box">
+        <strong>Seção 1 – Cabeçalho</strong><br><br>
+        <code>
+          [Logo do Bot]  Nome do Bot – Dashboard<br>
+          Status: Online 🟢  •  Versão: 1.0.0<br>
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Seção 2 – Cards de Status</strong><br><br>
+        <code>
+          Uptime: 2h 37m<br>
+          Ping médio: 42ms<br>
+          Servidores: 12<br>
+          Usuários rastreados: 356<br>
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Seção 3 – Comandos</strong><br><br>
+        <code>
+          Categoria: Utilidade → /ping, /help, /info<br>
+          Categoria: Aulas → /aulas, /proxima_aula<br>
+          Categoria: Economia → /saldo, /loja<br>
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Seção 4 – Estatísticas</strong><br><br>
+        <code>
+          Comandos mais usados:<br>
+          1) /help (120x)<br>
+          2) /ping (98x)<br>
+          3) /clima (54x)<br><br>
+          Top XP:<br>
+          1) @AkaneNaruto – Nível 7<br>
+          2) @Karla – Nível 6<br>
+          3) @Mael – Nível 5<br>
+        </code>
+      </div>
+    </div>
+
+    <!-- 5. Conexão entre bot e dashboard -->
+    <h3 class="section-title"><span>▸</span> 5. Como o dashboard conversa com o bot?</h3>
+    <div class="card">
+      <p>
+        Existem algumas formas comuns de conectar o dashboard com o bot:
+      </p>
+      <ul>
+        <li><strong>API interna do bot:</strong> o próprio bot sobe um servidor HTTP simples</li>
+        <li><strong>Backend separado:</strong> site e bot usam o mesmo banco de dados</li>
+        <li><strong>Arquivos JSON:</strong> dashboard lê os dados salvos pelo bot</li>
+      </ul>
+
+      <p>
+        Em cenários mais profissionais, o ideal é que o bot exponha uma pequena API
+        ou use um banco de dados compartilhado com o backend do site.
+      </p>
+
+      <div class="example-box">
+        <strong>Fluxo simples (conceito):</strong><br><br>
+        <code>
+          1. Bot atualiza contadores no banco/JSON<br>
+          2. Dashboard lê esses dados periodicamente<br>
+          3. Frontend (HTML/JS) mostra a informação para o usuário<br>
+        </code>
+      </div>
+    </div>
+
+    <!-- 6. Segurança e acesso -->
+    <h3 class="section-title"><span>▸</span> 6. Segurança e acesso ao dashboard</h3>
+    <div class="card">
+      <p>
+        Um dashboard, mesmo simples, precisa considerar:
+      </p>
+      <ul>
+        <li>Quem pode acessar? (público x só staff)</li>
+        <li>Precisa de login? (Discord OAuth, senha simples, etc.)</li>
+        <li>Informações sensíveis não devem ser exibidas (tokens, IDs internos, logs privados)</li>
+      </ul>
+
+      <p>
+        Em uma primeira versão, o dashboard pode ser apenas informativo e público,
+        sem permitir alterações (só leitura).
+      </p>
+    </div>
+
+    <!-- 7. Relacionando com o que já foi aprendido -->
+    <h3 class="section-title"><span>▸</span> 7. Ligando o dashboard com o resto do curso</h3>
+    <div class="card">
+      <p>
+        O dashboard é basicamente a “cara web” de tudo que já foi construído:
+      </p>
+      <ul>
+        <li>Usa <strong>dados</strong> salvos em JSON ou banco (Aulas 8 e 9)</li>
+        <li>Mostra estatísticas de <strong>comandos</strong> (Aulas 2, 5)</li>
+        <li>Pode exibir dados vindos de <strong>APIs externas</strong> (Aula 7)</li>
+        <li>Reflete os <strong>sistemas personalizados</strong> criados (Aula 6)</li>
+      </ul>
+
+      <p>
+        Em aulas futuras/projetos, esse dashboard pode ser implementado com:
+      </p>
+      <ul>
+        <li>HTML + CSS + JavaScript puro</li>
+        <li>Frameworks como <strong>React</strong>, <strong>Next.js</strong>, etc.</li>
+        <li>Flask ou Django (no caso de Python)</li>
+      </ul>
+    </div>
+
+    <!-- 8. Resumo -->
+    <h3 class="section-title"><span>▸</span> 8. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Vimos o conceito de <strong>dashboard web do bot</strong></li>
+        <li>Definimos quais seções e informações são úteis exibir</li>
+        <li>Desenhamos um layout conceitual com status, comandos e estatísticas</li>
+        <li>Entendemos as formas de conectar o bot com a página web</li>
+        <li>Falamos sobre segurança e acesso ao painel</li>
+        <li>Ligamos o dashboard com todos os conteúdos anteriores (APIs, JSON, DB, logs, etc.)</li>
+      </ul>
+      <p>
+        Nas próximas aulas, o objetivo é transformar esse conceito em um
+        <strong>projeto final</strong>, construindo um bot completo com painel,
+        sistemas internos e banco de dados.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 10 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

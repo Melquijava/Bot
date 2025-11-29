@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 11 – Criação de um Bot Completo (Projeto Final) | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    p, ul {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .example-box {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 40px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 11 • Módulo 4 – Projeto Final</div>
+
+    <h1>Criação de um Bot Completo (Projeto Final)</h1>
+    <p class="subtitle">
+      Objetivo da aula: unir tudo o que aprendemos desde o Módulo 1 para montar 
+      um bot completo, funcional, organizado, modularizado, com banco de dados, 
+      APIs externas, comandos, eventos, logs, sistema de XP e dashboard próprio.
+    </p>
+
+    <!-- 1. Arquitetura -->
+    <h3 class="section-title"><span>▸</span> 1. Arquitetura geral do projeto</h3>
+    <div class="card">
+      <p>
+        Antes de começar a programar, definimos como o projeto será organizado.  
+        Um bot completo precisa ter:
+      </p>
+
+      <ul>
+        <li><strong>Módulo de Comandos</strong> (slash commands)</li>
+        <li><strong>Módulo de Eventos</strong> (join, leave, mensagens, erros)</li>
+        <li><strong>Sistema de Logs</strong> (console + canal logs)</li>
+        <li><strong>Banco de Dados</strong> (JSON, SQLite ou MongoDB)</li>
+        <li><strong>Sistema de XP</strong></li>
+        <li><strong>Comandos com API externa</strong></li>
+        <li><strong>Configurações por servidor</strong></li>
+        <li><strong>Dashboard Web</strong> (opcional)</li>
+      </ul>
+
+      <p>Exemplo de estrutura de pastas:</p>
+
+      <div class="example-box">
+        <code>
+        /bot<br>
+        ├── config.json<br>
+        ├── index.js (ou main.py)<br>
+        ├── /comandos<br>
+        │     ├── utilidade<br>
+        │     ├── economia<br>
+        │     └── geral<br>
+        ├── /eventos<br>
+        │     ├── ready.js<br>
+        │     ├── guildMemberAdd.js<br>
+        │     └── interactionCreate.js<br>
+        ├── /sistema<br>
+        │     ├── xp.js<br>
+        │     ├── economia.js<br>
+        │     └── logs.js<br>
+        ├── /database<br>
+        │     ├── dados.json<br>
+        │     ├── sqlite.db<br>
+        │     └── mongodb.js<br>
+        └── /web (dashboard)<br>
+              └── index.html
+        </code>
+      </div>
+
+      <p>Assim o bot fica organizado, modular e escalável.</p>
+    </div>
+
+    <!-- 2. Comandos -->
+    <h3 class="section-title"><span>▸</span> 2. Sistema completo de comandos (/)</h3>
+    <div class="card">
+      <p>
+        Um bot completo usa <strong>Slash Commands</strong> organizados por categorias.
+      </p>
+
+      <p>Comandos essenciais do projeto final:</p>
+      <ul>
+        <li><strong>/help</strong> – lista todos os comandos</li>
+        <li><strong>/ping</strong> – status e latência</li>
+        <li><strong>/clima</strong> – API externa</li>
+        <li><strong>/serverinfo</strong> – dados do servidor</li>
+        <li><strong>/perfil</strong> – estatísticas do usuário</li>
+        <li><strong>/rank</strong> – ranking do XP</li>
+      </ul>
+
+      <p>
+        Cada comando deve ser um arquivo separado, limpo e modular.
+      </p>
+    </div>
+
+    <!-- 3. Eventos -->
+    <h3 class="section-title"><span>▸</span> 3. Eventos completos</h3>
+    <div class="card">
+      <p>Eventos que o bot final deve implementar:</p>
+      <ul>
+        <li><strong>ready</strong> – quando o bot liga</li>
+        <li><strong>guildMemberAdd</strong> – boas-vindas + logs</li>
+        <li><strong>guildMemberRemove</strong> – saída + logs</li>
+        <li><strong>interactionCreate</strong> – execução de comandos</li>
+        <li><strong>messageCreate</strong> – sistema de XP</li>
+        <li><strong>error</strong> – erros no bot</li>
+      </ul>
+
+      <p>
+        O event handler deve ser separado para manter o projeto limpo.
+      </p>
+    </div>
+
+    <!-- 4. XP System -->
+    <h3 class="section-title"><span>▸</span> 4. Sistema completo de XP e níveis</h3>
+    <div class="card">
+      <p>
+        Com base no que aprendemos no Módulo 3, o bot final terá:
+      </p>
+
+      <ul>
+        <li>XP ao enviar mensagens</li>
+        <li>Cooldown por usuário para evitar spam</li>
+        <li>Curva de XP progressiva</li>
+        <li>/perfil → mostra XP, nível e progresso</li>
+        <li>/rank → ranking global</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de cálculo de nível:</strong><br><br>
+        <code>
+        xpNecessario = nivel * 100  
+        nível = Math.floor(xpTotal / 100)
+        </code>
+      </div>
+    </div>
+
+    <!-- 5. Banco de dados -->
+    <h3 class="section-title"><span>▸</span> 5. Banco de dados real integrado</h3>
+    <div class="card">
+      <p>O bot final deve permitir escolher:</p>
+
+      <ul>
+        <li><strong>JSON</strong> → versão simples</li>
+        <li><strong>SQLite</strong> → versão intermediária</li>
+        <li><strong>MongoDB</strong> → versão avançada (produção)</li>
+      </ul>
+
+      <p>
+        Estrutura mínima necessária no banco:
+      </p>
+      <ul>
+        <li>Tabela/coleção de usuários: xp, nível, coins, comandos usados</li>
+        <li>Tabela/coleção de servidores: canais, cargos, logs</li>
+        <li>Logs de comandos (opcional)</li>
+      </ul>
+    </div>
+
+    <!-- 6. APIs -->
+    <h3 class="section-title"><span>▸</span> 6. Integração com pelo menos 1 API externa real</h3>
+    <div class="card">
+      <p>
+        Para o projeto final, o aluno precisa implementar pelo menos um comando
+        que consome uma API externa real:
+      </p>
+
+      <ul>
+        <li><strong>API de clima</strong> (OpenWeather)</li>
+        <li><strong>API de CEP</strong> (ViaCEP)</li>
+        <li><strong>API de moedas</strong> (AwesomeAPI)</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Fluxo:</strong><br><br>
+        <code>
+        Usuário → /clima São Paulo  
+        Bot → Faz requisição na API  
+        Bot → Retorna embed estilizada com temperatura, clima, etc.
+        </code>
+      </div>
+    </div>
+
+    <!-- 7. Dashboard -->
+    <h3 class="section-title"><span>▸</span> 7. Conectar com o Dashboard (Aula 10)</h3>
+    <div class="card">
+      <p>
+        O bot completo deve mandar dados para o dashboard ou permitir que o
+        dashboard leia os dados dele pelo JSON/DB.
+      </p>
+
+      <p>Informações recomendadas:</p>
+      <ul>
+        <li>Status do bot</li>
+        <li>Uptime</li>
+        <li>Comandos mais usados</li>
+        <li>Total de servidores</li>
+        <li>Ranking de XP</li>
+      </ul>
+    </div>
+
+    <!-- 8. Requisitos do Projeto Final -->
+    <h3 class="section-title"><span>▸</span> 8. Checklist completo do Projeto Final</h3>
+    <div class="card">
+      <p>Para considerar o bot realmente “completo”, ele precisa de:</p>
+
+      <ul>
+        <li>✔ Sistema de eventos</li>
+        <li>✔ Slash Commands organizados</li>
+        <li>✔ Sistema de XP</li>
+        <li>✔ Logs completos</li>
+        <li>✔ Banco de dados funcionando</li>
+        <li>✔ API externa integrada</li>
+        <li>✔ Dashboard básico</li>
+      </ul>
+    </div>
+
+    <!-- 9. Resumo -->
+    <h3 class="section-title"><span>▸</span> 9. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Definimos a arquitetura final do projeto</li>
+        <li>Criamos o sistema completo de comandos e eventos</li>
+        <li>Consolidamos o sistema de XP e níveis</li>
+        <li>Integramos com APIs externas</li>
+        <li>Conectamos com banco de dados profissional</li>
+        <li>Planejamos um dashboard simples e funcional</li>
+        <li>Montamos o checklist final do projeto</li>
+      </ul>
+
+      <p>
+        Após esta aula, o aluno já tem material suficiente para construir um bot
+        profissional do zero, organizado, modular e pronto para ser hospedado.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 11 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

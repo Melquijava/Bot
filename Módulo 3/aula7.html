@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 7 – Conexão com APIs Externas | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 23px; }
+      .page { padding: 22px 12px 40px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 7 • Módulo 3 — Integração com APIs</div>
+
+    <h1>Conexão com APIs Externas</h1>
+    <p class="subtitle">
+      Objetivo da aula: entender o que é uma API, como consumir dados externos para criar comandos úteis 
+      como <strong>/clima</strong>, <strong>/moedas</strong>, <strong>/cep</strong>, e como integrar tudo isso no bot 
+      usando JSON e eventos.
+    </p>
+
+    <!-- 1. O que é API -->
+    <h3 class="section-title"><span>▸</span> 1. O que é uma API?</h3>
+    <div class="card">
+      <p>
+        Uma <strong>API</strong> é uma interface que permite que um programa fale com outro.  
+        Para o nosso bot, isso significa:
+      </p>
+
+      <ul>
+        <li>Pegar informações em tempo real de sites e serviços</li>
+        <li>Integrar dados externos aos comandos</li>
+        <li>Automatizar tarefas com informações atualizadas</li>
+      </ul>
+
+      <p>Exemplos de APIs úteis para o bot:</p>
+      <ul>
+        <li>API de clima → /clima</li>
+        <li>API de moedas → /dolar /euro</li>
+        <li>API de CEP → /cep</li>
+        <li>API de anime → /anime</li>
+        <li>API de piadas → /piada</li>
+      </ul>
+    </div>
+
+    <!-- 2. Como funciona uma requisição -->
+    <h3 class="section-title"><span>▸</span> 2. Como funciona uma requisição para API?</h3>
+    <div class="card">
+      <p>
+        O processo sempre segue o mesmo fluxo:
+      </p>
+      <ul>
+        <li>O bot envia uma requisição para a API (GET)</li>
+        <li>A API responde com dados, geralmente em <strong>JSON</strong></li>
+        <li>O bot analisa esses dados</li>
+        <li>O bot responde no Discord com embed formatado</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de resposta de API de clima:</strong><br><br>
+        <code>
+        {<br>
+        &nbsp;"cidade": "São Paulo",<br>
+        &nbsp;"temperatura": 28,<br>
+        &nbsp;"umidade": 60,<br>
+        &nbsp;"descricao": "céu limpo"<br>
+        }
+        </code>
+      </div>
+
+      <p>
+        Perceba que APIs retornam dados estruturados que o bot pode usar.
+      </p>
+    </div>
+
+    <!-- 3. APIs gratuitas recomendadas -->
+    <h3 class="section-title"><span>▸</span> 3. APIs gratuitas para usar no bot</h3>
+    <div class="card">
+      <p>Algumas APIs excelentes e gratuitas:</p>
+
+      <ul>
+        <li><strong>Clima:</strong> OpenWeather (exige API key)</li>
+        <li><strong>CEP:</strong> ViaCEP (grátis e sem chave)</li>
+        <li><strong>Moedas:</strong> AwesomeAPI (cotação atualizada)</li>
+        <li><strong>Piadas:</strong> Official Joke API</li>
+        <li><strong>Inspirational Quotes:</strong> ZenQuotes</li>
+        <li><strong>Anime:</strong> Jikan API</li>
+      </ul>
+
+      <p>Essas serão usadas em exemplos nas próximas aulas com código real.</p>
+    </div>
+
+    <!-- 4. Estrutura de comando usando API -->
+    <h3 class="section-title"><span>▸</span> 4. Estrutura de um comando baseado em API</h3>
+    <div class="card">
+      <p>
+        Até sem código, já conseguimos imaginar o fluxo de um comando com API.
+        Exemplo: <code>/clima cidade:São Paulo</code>
+      </p>
+
+      <div class="example-box">
+        <strong>Fluxo do comando /clima:</strong><br><br>
+        <code>
+        1. Bot recebe "/clima São Paulo"<br>
+        2. Bot chama "https://api.openweathermap.org/data/2.5/weather..."<br>
+        3. API devolve temperatura, umidade, descrição<br>
+        4. Bot monta embed com esses dados<br>
+        5. Bot envia no Discord
+        </code>
+      </div>
+
+      <p>
+        Na parte prática (Python/JS), usaremos bibliotecas como <strong>fetch</strong>, 
+        <strong>axios</strong> ou <strong>requests</strong>.
+      </p>
+    </div>
+
+    <!-- 5. Tratamento de erros -->
+    <h3 class="section-title"><span>▸</span> 5. Tratamento de erros ao usar APIs</h3>
+    <div class="card">
+      <p>
+        Chamadas de API podem falhar. Exemplos:
+      </p>
+      <ul>
+        <li>Cidade inexistente</li>
+        <li>Limite diário atingido</li>
+        <li>API fora do ar</li>
+        <li>Usuário digitou errado</li>
+      </ul>
+
+      <p>O bot precisa ser capaz de detectar e avisar:</p>
+
+      <div class="example-box">
+        <strong>Mensagem amigável de erro:</strong><br><br>
+        <code>
+        Não consegui encontrar essa cidade.  
+        Verifique o nome e tente novamente! 🌍
+        </code>
+      </div>
+
+      <p>
+        Esse cuidado deixa o bot mais profissional e confiável.
+      </p>
+    </div>
+
+    <!-- 6. API + JSON + Sistema customizado -->
+    <h3 class="section-title"><span>▸</span> 6. API + JSON + Sistema do Bot</h3>
+    <div class="card">
+      <p>
+        APIs externas ficam ainda mais poderosas quando combinadas com:
+      </p>
+      <ul>
+        <li><strong>Eventos</strong> (Aula 3)</li>
+        <li><strong>Embeds</strong> (Aula 4)</li>
+        <li><strong>Logs</strong> (Aula 5)</strong></li>
+        <li><strong>Sistemas personalizados</strong> (Aula 6)</li>
+        <li><strong>JSON</strong> (Aula 8)</li>
+      </ul>
+
+      <p>Exemplo:</p>
+      <ul>
+        <li>Comando /clima salva a última pesquisa em JSON</li>
+        <li>Sistema de XP pode dar +1 XP a quem usar comandos de API</li>
+        <li>Logs registram qual usuário consultou dados externos</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Fluxo avançado:</strong><br><br>
+        <code>
+        /clima São Paulo  
+        → API retorna 28°C  
+        → Bot envia embed  
+        → Bot salva "última cidade pesquisada" no JSON  
+        → Bot registra no canal de logs  
+        </code>
+      </div>
+    </div>
+
+    <!-- 7. Resumo -->
+    <h3 class="section-title"><span>▸</span> 7. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Entendemos o que é uma API</li>
+        <li>Aprendemos o fluxo requisição → resposta → embed</li>
+        <li>Conhecemos APIs gratuitas para integrar ao bot</li>
+        <li>Vimos como funcionam comandos baseados em API</li>
+        <li>Falamos sobre tratamento de erros</li>
+        <li>Integramos APIs com JSON e sistemas personalizados</li>
+      </ul>
+
+      <p>
+        Na próxima aula (Aula 8), vimos como salvar dados com JSON.  
+        Depois (Aula 9), aprendemos a evoluir para bancos de dados reais.  
+        A partir daqui, já podemos criar comandos profissionais como:
+      </p>
+
+      <ul>
+        <li><code>/clima</code></li>
+        <li><code>/cotação</code></li>
+        <li><code>/cep</code></li>
+        <li><code>/anime</code></li>
+        <li><code>/piada</code></li>
+      </ul>
+
+      <p>
+        Essas integrações tornam o bot muito mais útil e completo.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 7 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

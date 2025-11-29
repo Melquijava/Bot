@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 8 – Mini Banco de Dados (JSON) | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    strong {
+      color: #e5e7eb;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 23px;
+      }
+      .page {
+        padding: 22px 12px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 8 • Módulo 3 – Dados & Persistência</div>
+
+    <h1>Mini Banco de Dados com JSON</h1>
+    <p class="subtitle">
+      Objetivo da aula: entender o que é <strong>persistência de dados</strong>, como usar
+      arquivos <strong>JSON</strong> como um “mini banco de dados” e como isso se conecta
+      com sistemas de XP, economia, configurações e estatísticas do bot.
+    </p>
+
+    <!-- 1. Persistência de dados -->
+    <h3 class="section-title"><span>▸</span> 1. O que é persistência de dados?</h3>
+    <div class="card">
+      <p>
+        Até agora, tudo o que o bot faz “some” quando ele é desligado.
+        Persistência de dados é a capacidade de <strong>guardar informações</strong>
+        para usar depois, mesmo que o bot seja reiniciado.
+      </p>
+      <p>Exemplos de coisas que queremos guardar:</p>
+      <ul>
+        <li>XP e nível dos usuários</li>
+        <li>Saldo de moedas de economia do servidor</li>
+        <li>Configurações do servidor (canais de log, cargos padrão, prefixos, etc.)</li>
+        <li>Histórico simples (quantos comandos alguém usou, por exemplo)</li>
+      </ul>
+      <p>
+        Hoje vamos ver como fazer isso com arquivos <strong>JSON</strong>,
+        uma solução simples e perfeita para projetos pequenos e médios.
+      </p>
+    </div>
+
+    <!-- 2. O que é JSON -->
+    <h3 class="section-title"><span>▸</span> 2. O que é JSON?</h3>
+    <div class="card">
+      <p>
+        <strong>JSON</strong> significa <em>JavaScript Object Notation</em>.
+        É um formato de texto usado para representar dados estruturados
+        (chave → valor).
+      </p>
+      <p>Características do JSON:</p>
+      <ul>
+        <li>É um arquivo de texto normal (ex.: <code>dados.json</code>)</li>
+        <li>Fácil de ler por humanos e por bots</li>
+        <li>Suportado nativamente em JavaScript e fácil de usar em Python</li>
+        <li>Perfeito para armazenar listas, objetos, configurações e estatísticas</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo simples de JSON com dados de usuários:</strong><br><br>
+        <code>
+          {<br>
+          &nbsp;&nbsp;"1234567890": { "xp": 120, "nivel": 3 },<br>
+          &nbsp;&nbsp;"9876543210": { "xp": 45, "nivel": 1 }<br>
+          }
+        </code>
+      </div>
+
+      <p>
+        Cada chave pode ser o <strong>ID do usuário</strong> e o valor é um objeto
+        com os dados desse usuário.
+      </p>
+    </div>
+
+    <!-- 3. Estruturando dados do bot -->
+    <h3 class="section-title"><span>▸</span> 3. Que dados faz sentido salvar para o bot?</h3>
+    <div class="card">
+      <p>
+        Antes de escrever qualquer linha de código, é importante decidir
+        <strong>o que será armazenado</strong> e <strong>como</strong>. Alguns exemplos práticos:
+      </p>
+
+      <div class="example-box">
+        <strong>a) Sistema de XP:</strong><br><br>
+        <code>
+          {<br>
+          &nbsp;&nbsp;"id_usuario_1": { "xp": 250, "nivel": 5 },<br>
+          &nbsp;&nbsp;"id_usuario_2": { "xp": 80, "nivel": 2 }<br>
+          }
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>b) Sistema de economia:</strong><br><br>
+        <code>
+          {<br>
+          &nbsp;&nbsp;"id_usuario_1": { "coins": 1500 },<br>
+          &nbsp;&nbsp;"id_usuario_2": { "coins": 270 }<br>
+          }
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>c) Configurações do servidor:</strong><br><br>
+        <code>
+          {<br>
+          &nbsp;&nbsp;"id_servidor": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"canal_logs": "1234567890",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"canal_boas_vindas": "0987654321",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cargo_padrao": "1122334455"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </code>
+      </div>
+
+      <p>
+        A ideia é sempre a mesma: chave → valor.
+        E o valor pode ser um objeto com todas as informações que fizerem sentido.
+      </p>
+    </div>
+
+    <!-- 4. Ciclo ler → alterar → salvar -->
+    <h3 class="section-title"><span>▸</span> 4. Ciclo básico: ler → alterar → salvar</h3>
+    <div class="card">
+      <p>
+        Independente se for Python ou JavaScript, o fluxo geral para usar JSON como
+        mini banco é sempre:
+      </p>
+      <ul>
+        <li><strong>1. Ler</strong> o arquivo JSON para a memória (carregar os dados)</li>
+        <li><strong>2. Alterar</strong> os dados conforme o que aconteceu (ex.: +10 de XP)</li>
+        <li><strong>3. Salvar</strong> de volta no arquivo JSON</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de fluxo com XP (conceito):</strong><br><br>
+        <code>
+          Evento: usuário mandou uma mensagem<br>
+          Ação:<br>
+          &nbsp;&nbsp;- Ler dados.json<br>
+          &nbsp;&nbsp;- Somar +5 XP ao usuário<br>
+          &nbsp;&nbsp;- Ver se atingiu XP suficiente para upar de nível<br>
+          &nbsp;&nbsp;- Salvar dados.json com os valores atualizados<br>
+        </code>
+      </div>
+
+      <p>
+        Nas próximas aulas você vai ver isso implementado em código real,
+        mas aqui o foco é entender a lógica do processo.
+      </p>
+    </div>
+
+    <!-- 5. Limitações e cuidados -->
+    <h3 class="section-title"><span>▸</span> 5. Limitações e cuidados ao usar JSON</h3>
+    <div class="card">
+      <p>
+        JSON é ótimo para começar, mas tem algumas limitações importantes:
+      </p>
+      <ul>
+        <li>Não é ideal para bots gigantes com milhares de usuários ativos</li>
+        <li>Se várias partes do bot salvarem ao mesmo tempo, pode dar conflito</li>
+        <li>Se o arquivo corromper (queda de energia, por exemplo), você pode perder dados</li>
+      </ul>
+
+      <p>Boas práticas:</p>
+      <ul>
+        <li>Manter cópias de segurança (backup) do arquivo JSON</li>
+        <li>Evitar salvar o arquivo a cada micro-ação (salvar em momentos chave)</li>
+        <li>Começar com JSON e, se o projeto crescer muito, migrar para um banco real</li>
+      </ul>
+
+      <p>
+        É exatamente por isso que, na <strong>Aula 9</strong>, vamos falar de bancos
+        mais robustos, como <strong>SQLite</strong> e <strong>MongoDB</strong>.
+      </p>
+    </div>
+
+    <!-- 6. Conexão com APIs e com o resto do curso -->
+    <h3 class="section-title"><span>▸</span> 6. Ligando tudo: comandos, eventos, APIs e JSON</h3>
+    <div class="card">
+      <p>
+        A essa altura do curso, você já viu:
+      </p>
+      <ul>
+        <li>Comandos (Aula 2)</li>
+        <li>Eventos (Aula 3)</li>
+        <li>Embeds (Aula 4)</li>
+        <li>Logs (Aula 5)</li>
+        <li>Sistemas personalizados (Aula 6)</li>
+        <li>(Se já tiverem visto) Uso de APIs externas (Aula 7)</li>
+      </ul>
+
+      <p>
+        JSON entra como a peça que falta para que tudo isso
+        <strong>lembre</strong> do que aconteceu:
+      </p>
+      <ul>
+        <li>Registrar XP de quem mais participou do chat</li>
+        <li>Guardar preferências de cada usuário (linguagem favorita, área do conhecimento, etc.)</li>
+        <li>Salvar as configurações do servidor e não depender de valores “fixos” no código</li>
+      </ul>
+
+      <p>
+        Assim, o bot começa a se comportar como um sistema de verdade,
+        com memória e estado próprio.
+      </p>
+    </div>
+
+    <!-- 7. Resumo -->
+    <h3 class="section-title"><span>▸</span> 7. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Entendemos o conceito de <strong>persistência de dados</strong></li>
+        <li>Vimos o que é <strong>JSON</strong> e por que é tão usado</li>
+        <li>Modelamos exemplos de dados para XP, economia e configurações</li>
+        <li>Aprendemos o ciclo básico ler → alterar → salvar</li>
+        <li>Conversamos sobre limitações e boas práticas ao usar JSON</li>
+        <li>Ligamos JSON com todo o restante do curso (comandos, eventos, APIs, etc.)</li>
+      </ul>
+      <p>
+        Na próxima etapa, vamos dar o próximo passo e conhecer bancos de dados
+        mais profissionais, como <strong>SQLite</strong> ou <strong>MongoDB</strong>, para quando o bot
+        crescer e precisar de mais robustez.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 8 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

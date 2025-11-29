@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 1 – Criação do Primeiro Bot | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 1 • Módulo Iniciante</div>
+
+    <h1>Criação do Primeiro Bot (Development for Discord)</h1>
+    <p class="subtitle">
+      Objetivo da aula: Criar seu primeiro bot do Discord, configurar permissões,
+      adicionar ao servidor e testar o primeiro comando funcional.
+    </p>
+
+    <!-- INTRODUÇÃO -->
+    <h3 class="section-title"><span>▸</span> 1. O que é um Bot do Discord?</h3>
+    <div class="card">
+      <p>
+        Um bot é um “usuário automático” que executa tarefas, responde mensagens, cria comandos,
+        envia embeds, administra o servidor e muito mais.  
+        Ele funciona através de:
+      </p>
+      <ul>
+        <li><strong>Token</strong> — a chave de acesso do bot</li>
+        <li><strong>Código</strong> — Python/JS que define a lógica do bot</li>
+        <li><strong>Intents</strong> — permissões internas</li>
+      </ul>
+      <p>
+        Hoje não vamos programar ainda — vamos apenas criar e ativar o bot usando o próprio painel
+        **Development for Discord**.
+      </p>
+    </div>
+
+    <!-- CRIAÇÃO -->
+    <h3 class="section-title"><span>▸</span> 2. Criando o Bot pelo Painel Oficial</h3>
+    <div class="card">
+      <p>Acesse o painel de desenvolvedores:</p>
+      <p><a href="https://discord.com/developers" target="_blank">https://discord.com/developers</a></p>
+
+      <ul>
+        <li>Clique em <strong>Applications</strong></li>
+        <li>Depois em <strong>New Application</strong></li>
+        <li>Dê um nome ao bot</li>
+        <li>Clique em <strong>Create</strong></li>
+      </ul>
+
+      <p>Agora vá no menu lateral em <strong>Bot</strong> → <strong>Add Bot</strong>.</p>
+    </div>
+
+    <!-- CONFIG INTENTS -->
+    <h3 class="section-title"><span>▸</span> 3. Configurando Intents e Permissões</h3>
+    <div class="card">
+      <p>Na aba <strong>Bot</strong>, ative as intents:</p>
+      <ul>
+        <li>Presence Intent</li>
+        <li>Server Members Intent</li>
+        <li>Message Content Intent</li>
+      </ul>
+
+      <p>A seguir, vá em <strong>OAuth2 → URL Generator</strong></p>
+
+      <p><strong>Selecione os escopos:</strong></p>
+      <ul>
+        <li><code>bot</code></li>
+        <li><code>applications.commands</code></li>
+      </ul>
+
+      <p><strong>Permissões recomendadas:</strong></p>
+      <ul>
+        <li>Send Messages</li>
+        <li>Embed Links</li>
+        <li>Use Slash Commands</li>
+      </ul>
+
+      <p>Copie a URL gerada — você vai usar para adicionar o bot no servidor.</p>
+    </div>
+
+    <!-- ADICIONAR AO SERVIDOR -->
+    <h3 class="section-title"><span>▸</span> 4. Adicionando o Bot no Servidor</h3>
+    <div class="card">
+      <ul>
+        <li>Abra a URL gerada</li>
+        <li>Escolha o servidor</li>
+        <li>Clique em <strong>Authorize</strong></li>
+        <li>Resolva o captcha</li>
+      </ul>
+
+      <p>Agora o bot está no servidor (mesmo offline por enquanto).</p>
+    </div>
+
+    <!-- PRIMEIRO COMANDO -->
+    <h3 class="section-title"><span>▸</span> 5. Criando e Testando o Primeiro Comando</h3>
+    <div class="card">
+      <p>Acesse o ambiente oficial de criação de comandos:</p>
+      <p><a href="https://discord.com/developers/docs/development" target="_blank">
+        https://discord.com/developers/docs/development
+      </a></p>
+
+      <p>Crie um novo comando <strong>Slash</strong>:</p>
+
+      <ul>
+        <li><strong>Nome:</strong> ping</li>
+        <li><strong>Descrição:</strong> Retorna pong!</li>
+      </ul>
+
+      <p>Resposta configurada:</p>
+      <code>Pong! 🏓</code>
+
+      <p>
+        Clique em <strong>Save</strong> e teste no servidor digitando:  
+      </p>
+
+      <code>/ping</code>
+
+      <p>Se respondeu "Pong!", seu bot está funcionando! 🎉</p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 1 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>

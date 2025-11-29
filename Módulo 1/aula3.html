@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aula 3 – Eventos Básicos | Systems_BSI Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1020;
+      --accent: #16f2b3;
+      --accent-soft: rgba(22, 242, 179, 0.1);
+      --text: #f5f5f5;
+      --muted: #a0a0b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #111827 0%, #020617 45%, #000 100%);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 4px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 32px 0 10px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 50%),
+                  var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    ul {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    strong {
+      color: #e5e7eb;
+    }
+
+    .example-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 23px;
+      }
+      .page {
+        padding: 22px 12px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="badge">AULA 3 • Módulo Iniciante</div>
+
+    <h1>Eventos Básicos do Bot (Entradas, Saídas e Mensagens)</h1>
+    <p class="subtitle">
+      Objetivo da aula: entender o conceito de <strong>eventos</strong> e fazer o bot
+      reagir automaticamente a ações no servidor, como entrada/saída de membros
+      e envio de mensagens, além de configurar logs simples.
+    </p>
+
+    <!-- 1. Conceito de Evento -->
+    <h3 class="section-title"><span>▸</span> 1. O que é um evento?</h3>
+    <div class="card">
+      <p>
+        Um <strong>evento</strong> é algo que acontece no servidor e que o bot pode “ouvir”
+        e reagir. Alguns exemplos:
+      </p>
+      <ul>
+        <li>Um membro entrou no servidor</li>
+        <li>Um membro saiu do servidor</li>
+        <li>Uma mensagem foi enviada</li>
+        <li>Um comando foi usado</li>
+      </ul>
+      <p>
+        Na prática, criamos funções que são executadas automaticamente quando
+        esses eventos acontecem. Nesta aula vamos:
+      </p>
+      <ul>
+        <li>Dar boas-vindas a novos membros</li>
+        <li>Registrar saídas de membros</li>
+        <li>Ler mensagens e reagir a certas palavras-chave</li>
+        <li>Registrar ações em um canal de log</li>
+      </ul>
+    </div>
+
+    <!-- 2. Evento de entrada de membro -->
+    <h3 class="section-title"><span>▸</span> 2. Evento de entrada de membro (welcome)</h3>
+    <div class="card">
+      <p>
+        O objetivo é fazer com que, sempre que alguém entrar no servidor, o bot envie
+        uma mensagem de boas-vindas em um canal específico.
+      </p>
+      <p><strong>Passos gerais (independente se for Python ou JS):</strong></p>
+      <ul>
+        <li>Definir um canal de boas-vindas (ex.: <code>#👋bem-vindo</code>)</li>
+        <li>Criar um evento que detecta quando um usuário entra</li>
+        <li>Enviar uma mensagem personalizada nesse canal</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo de mensagem de boas-vindas:</strong><br><br>
+        <code>
+          Bem-vindo(a) ao servidor, @novo_membro! 🎉<br>
+          Apresenta-te no chat e lê as regras para aproveitar o máximo da comunidade!
+        </code>
+      </div>
+
+      <p>
+        O foco da aula é o conceito: “quando alguém entra → bot envia mensagem”.
+        A implementação em código (Python/JS) será aprofundada nas próximas aulas.
+      </p>
+    </div>
+
+    <!-- 3. Evento de saída de membro -->
+    <h3 class="section-title"><span>▸</span> 3. Evento de saída de membro</h3>
+    <div class="card">
+      <p>
+        Assim como o evento de entrada, podemos monitorar quando alguém sai do servidor.
+        Em vez de mandar mensagem pública, geralmente é melhor registrar em um canal de log.
+      </p>
+
+      <p><strong>Ideia prática:</strong></p>
+      <ul>
+        <li>Criar um canal de logs (ex.: <code>#📜logs-servidor</code>)</li>
+        <li>Quando alguém sai, o bot envia algo como:</li>
+      </ul>
+
+      <div class="example-box">
+        <code>
+          [LOG] O usuário @fulano saiu do servidor. 😢
+        </code>
+      </div>
+
+      <p>
+        Isso ajuda a manter um histórico interno de entradas e saídas, útil para
+        organização da staff.
+      </p>
+    </div>
+
+    <!-- 4. Evento de mensagens -->
+    <h3 class="section-title"><span>▸</span> 4. Evento de mensagens (on message)</h3>
+    <div class="card">
+      <p>
+        O evento de mensagem permite fazer com que o bot leia o que está sendo enviado
+        no servidor e tome alguma ação. Exemplos simples:
+      </p>
+      <ul>
+        <li>Responder quando alguém disser “bom dia”</li>
+        <li>Filtrar certas palavras (moderação básica)</li>
+        <li>Reagir com emojis a certas frases</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Exemplo conceitual:</strong><br><br>
+        <code>
+          Se a mensagem contém "bom dia" → bot responde "Bom dia! 😄"
+        </code>
+      </div>
+
+      <p>
+        É importante lembrar que o bot não deve responder tudo,
+        para não floodar o chat. Usar esse tipo de automação com moderação.
+      </p>
+    </div>
+
+    <!-- 5. Logs simples -->
+    <h3 class="section-title"><span>▸</span> 5. Logs simples no console e no canal de log</h3>
+    <div class="card">
+      <p>
+        Antes de criar sistemas avançados, é muito útil aprender a
+        <strong>registrar o que está acontecendo</strong>, tanto no console quanto em canais específicos.
+      </p>
+      <p><strong>Exemplos de coisas para logar:</strong></p>
+      <ul>
+        <li>Quando o bot liga (inicia)</li>
+        <li>Quando alguém entra ou sai</li>
+        <li>Quando determinados comandos são usados</li>
+      </ul>
+
+      <div class="example-box">
+        <strong>Log no console (conceito):</strong><br><br>
+        <code>
+          Bot iniciado com sucesso! Logado como MeuBot#1234
+        </code>
+      </div>
+
+      <div class="example-box">
+        <strong>Log em canal de texto:</strong><br><br>
+        <code>
+          [LOG COMANDO] O usuário @ciclano usou o comando /help
+        </code>
+      </div>
+
+      <p>
+        Esse tipo de log é extremamente útil quando o bot começa a ter mais funções
+        e você precisa saber o que está acontecendo “por trás”.
+      </p>
+    </div>
+
+    <!-- 6. Boas práticas -->
+    <h3 class="section-title"><span>▸</span> 6. Boas práticas para evitar spam e problemas</h3>
+    <div class="card">
+      <p>
+        Como os eventos podem disparar muitas vezes, é importante seguir algumas
+        boas práticas:
+      </p>
+      <ul>
+        <li>Evitar responder toda mensagem com o bot</li>
+        <li>Usar condições claras (palavras específicas, canais específicos)</li>
+        <li>Evitar loops (bot respondendo a si mesmo)</li>
+        <li>Manter canais de log separados dos canais de conversa</li>
+        <li>Testar em servidor de testes antes de usar em produção</li>
+      </ul>
+      <p>
+        Com isso, você evita que o bot atrapalhe o chat e garante que ele ajude
+        em vez de incomodar.
+      </p>
+    </div>
+
+    <!-- 7. Resumo -->
+    <h3 class="section-title"><span>▸</span> 7. Resumo da Aula</h3>
+    <div class="card">
+      <ul>
+        <li>Aprendemos o conceito de <strong>evento</strong> no bot</li>
+        <li>Vimos como reagir à entrada de membros (boas-vindas)</li>
+        <li>Vimos como registrar saídas em um canal de log</li>
+        <li>Entendemos o evento de mensagens (on message) e usos básicos</li>
+        <li>Falamos sobre logs simples no console e em canais de texto</li>
+        <li>Vimos boas práticas para evitar spam e manter o servidor organizado</li>
+      </ul>
+      <p>
+        Nas próximas aulas, vamos juntar os eventos com comandos e começar a
+        programar bots em <strong>Python</strong> e <strong>JavaScript</strong>, conectando tudo isso na prática
+        com código real.
+      </p>
+    </div>
+
+    <div class="footer">
+      Systems_BSI Academy • Aula 3 – © Todos os direitos reservados.
+    </div>
+
+  </main>
+</body>
+</html>
