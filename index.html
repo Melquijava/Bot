@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Systems_BSI Academy – Curso de Bots para Discord</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root {
+            --bg: #020617;
+            --bg-alt: #020617;
+            --card: #020617;
+            --accent: #16f2b3;
+            --accent-strong: #0ea5e9;
+            --accent-soft: rgba(22, 242, 179, 0.1);
+            --text: #f9fafb;
+            --muted: #9ca3af;
+            --border: rgba(148, 163, 184, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at top, #0b1120 0%, #020617 45%, #000 100%);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* ============ HEADER / NAVBAR ============ */
+
+        .nav-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            backdrop-filter: blur(20px);
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.75), transparent);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.7);
+        }
+
+        .nav {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        .nav-brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .nav-brand-text span:first-child {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .nav-brand-text span:last-child {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            padding: 6px 0;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(to right, var(--accent), var(--accent-strong));
+            transition: width 0.18s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-ghost-btn,
+        .nav-primary-btn {
+            border-radius: 999px;
+            padding: 8px 15px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        .nav-ghost-btn {
+            border-color: rgba(148, 163, 184, 0.6);
+            color: var(--muted);
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .nav-ghost-btn:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .nav-primary-btn {
+            background: linear-gradient(to right, #0ea5e9, #22c55e);
+            color: #0b1120;
+            box-shadow: 0 0 32px rgba(56, 189, 248, 0.6);
+        }
+
+        .nav-primary-btn:hover {
+            filter: brightness(1.05);
+        }
+
+        /* ============ HERO ============ */
+
+        .hero {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 32px 18px 40px;
+            display: grid;
+            grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
+            gap: 26px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(22, 163, 74, 0.18), transparent 55%);
+            opacity: 0.85;
+            z-index: -1;
+        }
+
+        .hero-left-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 11px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .hero-left-badge span {
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        .hero-title {
+            font-size: clamp(30px, 4vw, 40px);
+            line-height: 1.15;
+            margin: 0 0 10px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(to right, #e5e7eb, #bae6fd);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: var(--muted);
+            max-width: 520px;
+            margin-bottom: 22px;
+        }
+
+        .hero-cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .hero-primary {
+            border-radius: 999px;
+            padding: 11px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(to right, #0ea5e9, #22c55e);
+            color: #020617;
+            box-shadow: 0 0 32px rgba(59, 130, 246, 0.6);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .hero-primary:hover {
+            filter: brightness(1.06);
+        }
+
+        .hero-secondary {
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-size: 13px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .hero-secondary:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .hero-stat {
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            min-width: 130px;
+        }
+
+        .hero-stat strong {
+            display: block;
+            font-size: 16px;
+            color: var(--text);
+        }
+
+        /* HERO RIGHT */
+
+        .hero-right {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            justify-content: space-between;
+        }
+
+        .hero-code-card {
+            border-radius: 18px;
+            padding: 18px 18px 16px;
+            background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.15), transparent 60%),
+                rgba(15, 23, 42, 0.96);
+            border: 1px solid rgba(148, 163, 184, 0.55);
+            box-shadow: 0 18px 42px rgba(15, 23, 42, 0.9);
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 12px;
+            color: #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .hero-code-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .hero-code-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #f97373;
+        }
+
+        .hero-code-dot:nth-child(2) {
+            background: #facc15;
+        }
+
+        .hero-code-dot:nth-child(3) {
+            background: #4ade80;
+        }
+
+        .hero-code-body span.cmd {
+            color: #22c55e;
+        }
+
+        .hero-code-body span.key {
+            color: #38bdf8;
+        }
+
+        .hero-code-body span.val {
+            color: #e5e7eb;
+        }
+
+        .hero-badge-floating {
+            position: absolute;
+            right: 14px;
+            bottom: 10px;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: rgba(15, 23, 42, 0.92);
+            color: var(--muted);
+        }
+
+        .hero-mini-note {
+            font-size: 11px;
+            color: var(--muted);
+            max-width: 260px;
+            align-self: flex-end;
+        }
+
+        /* ============ CONTENT SECTION (MÓDULOS) ============ */
+
+        .content-wrapper {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 10px 18px 45px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 18px;
+            border-top: 1px solid rgba(15, 23, 42, 0.9);
+            padding-top: 22px;
+        }
+
+        .content-header-left h2 {
+            margin: 0 0 6px;
+            font-size: 18px;
+        }
+
+        .content-header-left p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .content-header-right a {
+            font-size: 13px;
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(45, 212, 191, 0.55);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .modules-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+            font-size: 12px;
+        }
+
+        .modules-tab {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            color: var(--muted);
+            text-decoration: none;
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .modules-tab.active {
+            color: #0b1120;
+            background: linear-gradient(to right, #22c55e, #0ea5e9);
+            border-color: transparent;
+        }
+
+        .module-block {
+            margin-top: 20px;
+            padding: 18px 16px 16px;
+            border-radius: 18px;
+            background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.12), transparent 60%),
+                rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            margin-bottom: 16px;
+        }
+
+        .module-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .module-block-title {
+            font-size: 14px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .module-block-title span {
+            color: var(--accent);
+        }
+
+        .module-block-pill {
+            font-size: 11px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            color: var(--muted);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .module-block-desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card {
+            position: relative;
+            height: 100%;
+            background: radial-gradient(circle at top left, rgba(22, 242, 179, 0.08), transparent 55%),
+                rgba(15, 23, 42, 0.98);
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            padding: 14px 14px 14px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 35px rgba(15, 23, 42, 0.9);
+            border-color: rgba(22, 242, 179, 0.7);
+        }
+
+        .card-module {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            margin-top: 6px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted);
+        }
+
+        .pill {
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            font-size: 11px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            font-size: 12px;
+            color: var(--muted);
+            padding: 18px 18px 24px;
+            border-top: 1px solid rgba(15, 23, 42, 0.9);
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .hero-right {
+                order: -1;
+            }
+
+            .hero-mini-note {
+                align-self: flex-start;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .nav {
+                padding-inline: 14px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-inline: 14px;
+            }
+
+            .content-wrapper {
+                padding-inline: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-cta-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero-stats {
+                gap: 10px;
+            }
+
+            .hero-stat {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="nav-wrapper">
+        <div class="nav">
+            <div class="nav-left">
+                <div class="nav-logo">
+                    <img src="/Conteúdos/assets/img/logo4k.jpg">
+                </div>
+                <div class="nav-brand-text">
+                    <span>Systems_BSI</span>
+                    <span>Academy • Bots</span>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-link" href="#modulos">Formação</a>
+                <a class="nav-link" href="/Conteúdos/Grade/grade.html">Grade Completa</a>
+                <a class="nav-link" href="#sobre">Sobre o curso</a>
+            </nav>
+
+            <div class="nav-cta-group">
+                <a class="nav-ghost-btn" href="https://systemsbsi.com" title="Voltar ao site principal">
+                    Voltar ao Site
+                </a>
+                <a class="nav-primary-btn" href="#modulo1">
+                    Começar agora
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-left-badge">
+                <span>●</span> Formação completa • Python & JS
+            </div>
+            <h1 class="hero-title">
+                Systems_BSI <span>Academy – Curso de Bots para Discord</span>
+            </h1>
+            <p class="hero-subtitle">
+                Do primeiro comando até um bot profissional com API, banco de dados, sistema de XP,
+                dashboard web e deploy em produção. Um percurso guiado, pensado para a comunidade
+                <strong>Systems_BSI</strong>.
+            </p>
+
+            <div class="hero-cta-row">
+                <a href="#modulo1" class="hero-primary">
+                    Iniciar no Módulo 1
+                </a>
+                <a href="/Conteúdos/Grade/grade.html" class="hero-secondary">
+                    Ver grade completa do curso
+                </a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <strong>12 aulas</strong>
+                    Trilha prática, passo a passo
+                </div>
+                <div class="hero-stat">
+                    <strong>4 módulos</strong>
+                    Do básico ao projeto final
+                </div>
+                <div class="hero-stat">
+                    <strong>Bot completo</strong>
+                    XP, APIs, DB & dashboard
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="hero-code-card">
+                <div class="hero-code-header">
+                    <div class="hero-code-dots">
+                        <span class="hero-code-dot"></span>
+                        <span class="hero-code-dot"></span>
+                        <span class="hero-code-dot"></span>
+                    </div>
+                    <span>terminal • systems_bsi.dev</span>
+                </div>
+                <div class="hero-code-body">
+                    <div><span class="cmd">$</span> curl -I systems_bsi.dev</div>
+                    <div>HTTP/2 <span class="val">200</span></div>
+                    <div><span class="key">server:</span> <span class="val">nginx</span></div>
+                    <div><span class="key">x-systems:</span> <span class="val">bsi-academy</span></div>
+                    <br>
+                    <div><span class="key">curso:</span> <span class="val">bots-discord</span></div>
+                    <div><span class="key">stack:</span> <span class="val">python, javascript, api, db</span></div>
+                    <div><span class="key">status:</span> <span class="val">online • guiado</span></div>
+                </div>
+                <div class="hero-badge-floating">
+                    Feito para a comunidade Systems_BSI
+                </div>
+            </div>
+
+            <p class="hero-mini-note">
+                Esta formação foi criada para ser usada em aulas ao vivo, estudos individuais
+                e como base oficial para qualquer projeto de bot dentro da comunidade.
+            </p>
+        </div>
+    </section>
+
+    <!-- CONTENT: MÓDULOS & AULAS -->
+    <main class="content-wrapper" id="modulos">
+
+        <div class="content-header">
+            <div class="content-header-left" id="sobre">
+                <h2>Trilha completa do curso</h2>
+                <p>
+                    Siga a ordem recomendada dos módulos ou acesse diretamente a aula que quiser.
+                    Todo o conteúdo é dividido para evoluir da teoria à prática e depois à produção.
+                </p>
+            </div>
+            <div class="content-header-right">
+                <a href="/Conteúdos/Grade/grade.html">
+                    📚 Ver grade em detalhe
+                </a>
+            </div>
+        </div>
+
+        <div class="modules-tabs">
+            <a href="#modulo1" class="modules-tab active">Módulo 1 • Primeiros passos</a>
+            <a href="#modulo2" class="modules-tab">Módulo 2 • Interações & sistemas</a>
+            <a href="#modulo3" class="modules-tab">Módulo 3 • Dados & APIs</a>
+            <a href="#modulo4" class="modules-tab">Módulo 4 • Dashboard & produção</a>
+        </div>
+
+        <!-- MÓDULO 1 -->
+        <section id="modulo1" class="module-block">
+            <div class="module-block-header">
+                <div class="module-block-title"><span>▸</span> Módulo 1 – Primeiros Passos</div>
+                <div class="module-block-pill">Nível: Iniciante</div>
+            </div>
+            <p class="module-block-desc">
+                Configuração do ambiente, criação do primeiro bot, comandos básicos e eventos
+                essenciais para quem está começando no desenvolvimento de bots para Discord.
+            </p>
+
+            <div class="module-grid">
+                <a class="card-link" href="/Conteúdos/Módulo 1/aula1.html">
+                    <div class="card">
+                        <div class="card-module">Aula 1</div>
+                        <div class="card-title">Criação do Primeiro Bot</div>
+                        <div class="card-desc">
+                            O que é um bot do Discord, criação no Development for Discord, permissões,
+                            escopos e teste do primeiro comando.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Setup inicial</span>
+                            <span>🚀 Primeiro contato</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/Conteúdos/Módulo 1/aula2.html">
+                    <div class="card">
+                        <div class="card-module">Aula 2</div>
+                        <div class="card-title">Estrutura de Comandos (Slash)</div>
+                        <div class="card-desc">
+                            Organização de comandos como /ping, /help e /info,
+                            comandos globais vs. por servidor e respostas públicas/ephemeral.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Comandos</span>
+                            <span>⌨️ Slash commands</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/Conteúdos/Módulo 1/aula3.html">
+                    <div class="card">
+                        <div class="card-module">Aula 3</div>
+                        <div class="card-title">Eventos Básicos do Bot</div>
+                        <div class="card-desc">
+                            Entendendo eventos, mensagens automáticas de boas-vindas, logs simples
+                            de entrada/saída e reações a mensagens.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Eventos</span>
+                            <span>📡 Fluxo do bot</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- MÓDULO 2 -->
+        <section id="modulo2" class="module-block">
+            <div class="module-block-header">
+                <div class="module-block-title"><span>▸</span> Módulo 2 – Interações & Sistemas Visuais</div>
+                <div class="module-block-pill">Nível: Intermediário</div>
+            </div>
+            <p class="module-block-desc">
+                Nesta etapa o foco é tornar o bot mais agradável e útil para os usuários:
+                mensagens ricas, sistemas de log profissionais e fluxos personalizados para o servidor.
+            </p>
+
+            <div class="module-grid">
+                <a class="card-link" href="/Conteúdos/Módulo 2/aula4.html">
+                    <div class="card">
+                        <div class="card-module">Aula 4</div>
+                        <div class="card-title">Embeds e Mensagens Estilizadas</div>
+                        <div class="card-desc">
+                            Como criar embeds profissionais, usar cores, campos, imagens, footers
+                            e preparar a base para interações avançadas.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">UI do bot</span>
+                            <span>🎨 Visual</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/Conteúdos/Módulo 2/aula5.html">
+                    <div class="card">
+                        <div class="card-module">Aula 5</div>
+                        <div class="card-title">Sistema de Registros e Logs</div>
+                        <div class="card-desc">
+                            Criação de canais dedicados, modelos de mensagens de log e
+                            diferenciação entre logs no console e no Discord.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Monitoramento</span>
+                            <span>📜 Logs</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/Conteúdos/Módulo 2/aula6.html">
+                    <div class="card">
+                        <div class="card-module">Aula 6</div>
+                        <div class="card-title">Sistemas Personalizados</div>
+                        <div class="card-desc">
+                            Sistemas de boas-vindas avançados, auto-roles básicos,
+                            comandos de info do servidor e fluxos de onboarding.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Experiência</span>
+                            <span>🧩 Sistemas</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- MÓDULO 3 -->
+        <section id="modulo3" class="module-block">
+            <div class="module-block-header">
+                <div class="module-block-title"><span>▸</span> Módulo 3 – Dados, APIs & Persistência</div>
+                <div class="module-block-pill">Nível: Intermediário / Avançado</div>
+            </div>
+            <p class="module-block-desc">
+                A partir daqui o bot ganha memória e começa a conversar com o mundo externo:
+                APIs, JSON, bancos de dados e modelagem de informações de usuários e servidores.
+            </p>
+
+            <div class="module-grid">
+                <a class="card-link" href="/Conteúdos/Módulo 3/aula7.html">
+                    <div class="card">
+                        <div class="card-module">Aula 7</div>
+                        <div class="card-title">Conexão com APIs Externas</div>
+                        <div class="card-desc">
+                            Conceito de API, fluxo de requisição/resposta, uso de APIs para
+                            clima, CEP, moedas, piadas e integrações em slash commands.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Integração</span>
+                            <span>🌐 APIs</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/Conteúdos/Módulo 3/aula8.html">
+                    <div class="card">
+                        <div class="card-module">Aula 8</div>
+                        <div class="card-title">Mini Banco de Dados com JSON</div>
+                        <div class="card-desc">
+                            Introdução à persistência com JSON: XP, economia, configurações
+                            e boas práticas para leitura, alteração e gravação de dados.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Persistência</span>
+                            <span>📁 JSON</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/Conteúdos/Módulo 3/aula9.html">
+                    <div class="card">
+                        <div class="card-module">Aula 9</div>
+                        <div class="card-title">Banco de Dados Profissional</div>
+                        <div class="card-desc">
+                            Conceitos de SQLite e MongoDB, diferenças entre SQL e NoSQL
+                            e modelagem de usuários/servidores para bots escaláveis.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Banco de dados</span>
+                            <span>💾 DB</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- MÓDULO 4 -->
+        <section id="modulo4" class="module-block">
+            <div class="module-block-header">
+                <div class="module-block-title"><span>▸</span> Módulo 4 – Dashboard, Produção & Projeto Final</div>
+                <div class="module-block-pill">Nível: Avançado</div>
+            </div>
+            <p class="module-block-desc">
+                Fechando a formação com um bot completo: dashboard web, projeto final
+                integrado com banco de dados e APIs, publicação na nuvem e segurança.
+            </p>
+
+            <div class="module-grid">
+                <a class="card-link" href="/Conteúdos/Módulo 4/aula10.html">
+                    <div class="card">
+                        <div class="card-module">Aula 10</div>
+                        <div class="card-title">Dashboard Web do Bot</div>
+                        <div class="card-desc">
+                            Conceito e layout de um painel web mostrando status, comandos,
+                            estatísticas e integração com os dados internos do bot.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Interface web</span>
+                            <span>📊 Dashboard</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/Conteúdos/Módulo 4/aula11.html">
+                    <div class="card">
+                        <div class="card-module">Aula 11</div>
+                        <div class="card-title">Bot Completo – Projeto Final</div>
+                        <div class="card-desc">
+                            Integração de comandos, eventos, XP, logs, banco, APIs externas
+                            e dashboard em um único projeto modular e profissional.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Projeto final</span>
+                            <span>🏁 Full bot</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/Conteúdos/Módulo 4/aula12.html">
+                    <div class="card">
+                        <div class="card-module">Aula 12</div>
+                        <div class="card-title">Publicação, Hospedagem e Segurança</div>
+                        <div class="card-desc">
+                            Deploy do bot na nuvem, uso de .env, proteção de tokens, backup
+                            de banco de dados e checklist final de produção.
+                        </div>
+                        <div class="card-footer">
+                            <span class="pill">Produção</span>
+                            <span>☁️ Online 24/7</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <footer class="footer">
+            Systems_BSI Academy • Curso de Bots para Discord – © Todos os direitos reservados.
+        </footer>
+    </main>
+
+</body>
+
+</html>
